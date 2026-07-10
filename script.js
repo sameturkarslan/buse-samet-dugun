@@ -16,7 +16,7 @@ fileInput.addEventListener("change", async function () {
   const formData = new FormData();
 
   formData.append("file", file);
-  formData.append("upload_preset", "buse_samet");
+  formData.append("upload_preset", "Buse-Samet");
 
   try {
 
