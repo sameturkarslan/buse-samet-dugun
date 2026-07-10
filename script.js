@@ -22,7 +22,7 @@ fileInput.addEventListener("change", () => {
   })
 
   .then(response => response.json())
-p
+
   .then(data => {
     console.log(data);
 
