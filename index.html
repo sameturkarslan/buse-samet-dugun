@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samet ❤️ Buse | Anılarımızı Birlikte Biriktirelim</title>
+
+    <meta name="theme-color" content="#f8f8f8">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="background-blur"></div>
+
+<div class="container">
+
+<header>
+
+    <img src="assets/hero.jpg"
+         alt="Samet ve Buse"
+         class="hero-image">
+
+    <h1>Samet <span>❤️</span> Buse</h1>
+
+    <p class="date">
+        19 Eylül 2026
+    </p>
+
+</header>
+
+
+<section class="welcome">
+
+<h2>
+Anılarımızı Birlikte Biriktirelim
+</h2>
+
+<p>
+
+Bugün çektiğiniz en güzel fotoğraf ve videoları bizimle paylaşabilirsiniz.
+
+Paylaştığınız her kare,
+hayatımızın en değerli anılarından biri olacak.
+
+</p>
+
+</section>
+
+
+
+<section class="upload-card">
+
+<input
+type="file"
+id="fileInput"
+multiple
+accept="image/*,video/*"
+hidden>
+
+<button id="chooseBtn" class="primary-button">
+
+📷 Fotoğraf ve Video Seç
+
+</button>
+
+<p id="selectedFiles">
+
+Henüz dosya seçilmedi.
+
+</p>
+
+<div class="guest">
+
+<label>
+
+İsminiz
+<span>(İsteğe Bağlı)</span>
+
+</label>
+
+<input
+type="text"
+id="guestName"
+placeholder="Örneğin: Ahmet">
+
+</div>
+
+
+<div class="guest">
+
+<label>
+
+Mesajınız
+<span>(İsteğe Bağlı)</span>
+
+</label>
+
+<textarea
+id="guestMessage"
+rows="4"
+placeholder="Mutluluklar diliyoruz ❤️"></textarea>
+
+</div>
+
+
+
+<button
+id="uploadBtn"
+class="upload-button">
+
+📤
+Yüklemeyi Başlat
+
+</button>
+
+</section>
+
+
+
+<section class="progress-area">
+
+<div class="progress">
+
+<div
+class="progress-bar"
+id="progressBar">
+
+</div>
+
+</div>
+
+<p id="progressText">
+
+0%
+
+</p>
+
+</section>
+
+
+
+<section
+id="success"
+class="success">
+
+<div class="success-heart">
+
+❤️
+
+</div>
+
+<h2>
+
+Teşekkür Ederiz
+
+</h2>
+
+<p>
+
+Paylaştığınız anılar
+ömür boyu bizimle kalacak.
+
+</p>
+
+<h3>
+
+Samet & Buse
+
+</h3>
+
+</section>
+
+
+
+<footer>
+
+<p>
+
+19 Eylül 2026
+
+</p>
+
+<p>
+
+Sizinle birlikte olduğumuz için çok mutluyuz.
+
+</p>
+
+</footer>
+
+</div>
+
+<script src="config.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
