@@ -17,6 +17,7 @@ fileInput.addEventListener("change", async function () {
 
   formData.append("file", file);
   formData.append("upload_preset", "buse_samet");
+  formData.append("tags", "buse_samet");
 
   try {
 
