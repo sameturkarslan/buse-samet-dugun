@@ -24,8 +24,13 @@ fileInput.addEventListener("change", () => {
   .then(response => response.json())
 p
   .then(data => {
-    alert("Fotoğraf başarıyla yüklendi ❤️");
     console.log(data);
+
+    if (data.secure_url) {
+        alert("Fotoğraf başarıyla yüklendi ❤️");
+    } else {
+        alert("Yükleme hatası: " + data.error.message);
+    }
   })
 
   .catch(error => {
