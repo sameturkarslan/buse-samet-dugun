@@ -1,76 +1,108 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Buse & Samet</title>
+
   <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <div class="container">
 
-  <div class="hero">
+    <!-- Başlık -->
 
-    <p class="small-title">
-      Mutluluğumuzu Paylaşmaya Davetlisiniz
-    </p>
+    <section class="hero">
 
-    <h1>Buse</h1>
-    <span class="amp">&</span>
-    <h1>Samet</h1>
+        <p class="small-title">
+            Mutluluğumuzu Paylaşmaya Davetlisiniz
+        </p>
 
-    <div class="line"></div>
+        <h1>Buse</h1>
 
-    <p class="date">
-      19 Eylül 2026
-    </p>
+        <span class="amp">&</span>
 
-  </div>
+        <h1>Samet</h1>
 
+        <div class="line"></div>
 
-  <div class="card">
+        <p class="date">
+            19 Eylül 2026
+        </p>
 
-    <h2>Düğün Fotoğraf Albümü</h2>
-
-    <p>
-      Bu özel günümüzde çektiğiniz fotoğrafları
-      bizimle paylaşabilirsiniz.
-    </p>
+    </section>
 
 
-    <input 
-      type="file" 
-      id="fileInput" 
-      accept="image/*"
-      style="display:none;"
-    >
+    <!-- Fotoğraf Yükleme -->
 
-    <button id="uploadBtn">
-      Fotoğraf Yükle
-    </button>
+    <section class="card">
 
-  </div>
+        <h2>Düğün Fotoğraf Albümü</h2>
 
-  <div class="gallery">
+        <p>
+            Bu özel günümüzde çektiğiniz
+            fotoğrafları bizimle paylaşabilirsiniz.
+        </p>
 
-    <h2>Anılarımız</h2>
+        <input
+            type="file"
+            id="fileInput"
+            accept="image/*"
+            hidden
+        >
 
-    <div id="photoGallery">
-     Fotoğraflar yükleniyor...
-    </div>
+        <button id="uploadBtn">
 
-  </div>
-  <div class="footer">
-    Sevgiyle...
-  </div>
+            📸 Fotoğraf Yükle
 
+        </button>
+
+        <p id="uploadStatus"></p>
+
+    </section>
+
+
+
+    <!-- Galeri -->
+
+    <section class="gallery">
+
+        <h2>Anılarımız ❤️</h2>
+
+        <div id="photoGallery">
+
+            <div class="loading">
+
+                Fotoğraflar yükleniyor...
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- Footer -->
+
+    <footer>
+
+        Sevgiyle...
+
+    </footer>
 
 </div>
 
 
+
 <script type="module" src="script.js"></script>
-  
+
 </body>
+
 </html>
