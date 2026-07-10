@@ -29,9 +29,7 @@ fileInput.addEventListener("change", () => {
     if (data.secure_url) {
         alert("Fotoğraf başarıyla yüklendi ❤️");
     } else {
-        alert("Yükleme hatası: " + data.error.message);
-    }
-  })
+        alert(JSON.stringify(data));
 
   .catch(error => {
     alert("Yükleme sırasında hata oluştu");
