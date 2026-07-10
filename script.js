@@ -1,39 +1,48 @@
 const uploadButton = document.getElementById("uploadBtn");
 const fileInput = document.getElementById("fileInput");
 
-uploadButton.addEventListener("click", () => {
+uploadButton.addEventListener("click", function () {
   fileInput.click();
 });
 
-fileInput.addEventListener("change", () => {
+fileInput.addEventListener("change", async function () {
 
   const file = fileInput.files[0];
 
-  if (!file) return;
+  if (!file) {
+    return;
+  }
 
   const formData = new FormData();
 
   formData.append("file", file);
   formData.append("upload_preset", "buse_samet");
 
-  fetch("https://api.cloudinary.com/v1_1/p0wgo1yp/image/upload", {
-    method: "POST",
-    body: formData
-  })
+  try {
 
-  .then(response => response.json())
+    const response = await fetch(
+      "https://api.cloudinary.com/v1_1/p0wgo1yp/image/upload",
+      {
+        method: "POST",
+        body: formData
+      }
+    );
 
-  .then(data => {
+    const data = await response.json();
+
     console.log(data);
 
     if (data.secure_url) {
-        alert("Fotoğraf başarıyla yüklendi ❤️");
+      alert("Fotoğraf başarıyla yüklendi ❤️");
     } else {
-        alert(JSON.stringify(data));
+      alert("Hata: " + JSON.stringify(data));
+    }
 
-  .catch(error => {
-    alert("Yükleme sırasında hata oluştu");
+  } catch (error) {
+
+    alert("Bağlantı hatası oluştu");
     console.log(error);
-  });
+
+  }
 
 });
