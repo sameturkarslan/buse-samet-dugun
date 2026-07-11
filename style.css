@@ -1,596 +1,638 @@
-/* ===================================================
-   style.css
-   BÖLÜM 1 / 2
-=================================================== */
+/*==================================================
+  BUSE & SAMET
+  PREMIUM WEDDING THEME
+  BÖLÜM 1
+==================================================*/
+
+:root{
+
+    --bg:#FAF8F5;
+    --white:#ffffff;
+
+    --gold:#D6B77A;
+    --gold-dark:#B9935B;
+    --gold-light:#F1E6CF;
+
+    --text:#4A433E;
+    --text-soft:#857C73;
+
+    --shadow:0 20px 45px rgba(0,0,0,.08);
+
+    --radius:26px;
+
+    --transition:.35s ease;
+
+}
 
 *{
+
     margin:0;
     padding:0;
     box-sizing:border-box;
+
 }
 
 html{
+
     scroll-behavior:smooth;
+
 }
 
 body{
 
-    font-family:"Montserrat", sans-serif;
+    background:
+    radial-gradient(circle at top,#ffffff 0%,#FAF8F5 65%);
 
-    background:linear-gradient(
-        180deg,
-        #FCFAF6 0%,
-        #F8F4EE 45%,
-        #FDFBF8 100%
-    );
+    color:var(--text);
 
-    color:#333;
+    font-family:"Montserrat",sans-serif;
 
-    min-height:100vh;
+    overflow-x:hidden;
 
-    line-height:1.6;
+    line-height:1.7;
 
 }
 
 
-/* ===========================================
-   HEADER
-=========================================== */
+/*==============================
+ HERO
+==============================*/
 
 .hero{
 
-    padding:55px 20px 35px;
+    position:relative;
 
     text-align:center;
 
-    background:linear-gradient(
-        180deg,
-        #FCFAF6 0%,
-        #F7F3EC 100%
-    );
-
-    border-bottom:1px solid rgba(176,141,87,.18);
-
-    box-shadow:0 8px 30px rgba(0,0,0,.05);
-
-}
-
-.welcome{
-
-    font-family:"Montserrat", sans-serif;
-
-    font-size:16px;
-
-    font-weight:400;
-
-    letter-spacing:.8px;
-
-    color:#8A7A62;
-
-    margin-bottom:18px;
-
-}
-
-.hero h1{
-
-    font-family:"Cinzel", serif;
-
-    font-size:56px;
-
-    font-weight:600;
-
-    letter-spacing:4px;
-
-    line-height:1.15;
-
-    color:#B08D57;
-
-    text-transform:uppercase;
-
-    text-shadow:0 2px 8px rgba(176,141,87,.18);
-
-    margin:0;
-
-}
-
-.ampersand{
-
-    font-family:"Cormorant Garamond", serif;
-
-    font-size:42px;
-
-    font-style:italic;
-
-    font-weight:500;
-
-    color:#C6A96A;
-
-    margin:12px 0;
-
-    line-height:1;
-
-}
-
-.
-
-.date{
-
-    font-family:"Montserrat", sans-serif;
-
-    font-size:18px;
-
-    font-weight:500;
-
-    letter-spacing:2px;
-
-    color:#B08D57;
-
-    margin-top:20px;
-
-}
-/* ===========================================
-   FOTOĞRAF YÜKLEME
-=========================================== */
-
-.upload-section{
-
-    max-width:700px;
-
-    margin:35px auto;
-
-    padding:35px 30px;
-
-    text-align:center;
-
-    background:#ffffff;
-
-    border-radius:24px;
-
-    border:1px solid rgba(176,141,87,.15);
-
-    box-shadow:
-        0 15px 40px rgba(0,0,0,.06),
-        0 4px 12px rgba(176,141,87,.08);
-
-}
-
-.description{
-
-    max-width:650px;
-
-    margin:12px auto 25px;
-
-    color:#666;
-
-    line-height:1.6;
-
-}
-
-#fileInput{
-
-    display:none;
-
-}
-
-#uploadBtn{
-
-    font-family:"Montserrat", sans-serif;
-
-    font-size:17px;
-
-    font-weight:600;
-
-    letter-spacing:.5px;
-
-    color:#ffffff;
-
-    background:linear-gradient(
-        135deg,
-        #C9A96E 0%,
-        #B08D57 100%
-    );
-
-    border:none;
-
-    outline:none;
-
-    border-radius:999px;
-
-    padding:16px 34px;
-
-    cursor:pointer;
-
-    box-shadow:0 10px 25px rgba(176,141,87,.30);
-
-    transition:all .30s ease;
-
-}
-
-#uploadBtn:hover{
-
-    transform:translateY(-3px) scale(1.03);
-
-    box-shadow:0 16px 35px rgba(176,141,87,.40);
-
-}
-
-#uploadBtn:active{
-
-    transform:translateY(1px) scale(.98);
-
-    box-shadow:0 6px 15px rgba(176,141,87,.25);
-
-}
-
-#uploadBtn:disabled{
-
-    opacity:.6;
-
-    cursor:not-allowed;
-
-}
-
-#uploadStatus{
-
-    margin-top:15px;
-
-    min-height:24px;
-
-}
-
-
-/* ===========================================
-   GALERİ
-=========================================== */
-
-.gallery-section{
-
-    max-width:1200px;
-
-    margin:40px auto 60px;
-
-    padding:35px 25px;
-
-    background:#ffffff;
-
-    border-radius:24px;
-
-    border:1px solid rgba(176,141,87,.15);
-
-    box-shadow:
-        0 15px 40px rgba(0,0,0,.06),
-        0 4px 12px rgba(176,141,87,.08);
-
-}
-
-.gallery-section h2{
-
-    font-family:"Cinzel", serif;
-
-    font-size:34px;
-
-    font-weight:600;
-
-    letter-spacing:2px;
-
-    color:#B08D57;
-
-    text-align:center;
-
-    margin-bottom:28px;
-
-    text-transform:uppercase;
-
-}
-
-#photoGallery{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-
-    gap:12px;
-
-}
-
-.gallery-image{
-
-    width:100%;
-
-    aspect-ratio:1/1;
-
-    object-fit:cover;
-
-    border-radius:18px;
-
-    cursor:pointer;
-
-    transition:all .35s ease;
-
-    user-select:none;
-
-    -webkit-user-select:none;
-
-    border:4px solid #ffffff;
-
-    box-shadow:
-        0 8px 25px rgba(0,0,0,.08),
-        0 2px 8px rgba(176,141,87,.10);
-
-}
-
-.gallery-image:hover{
-
-    transform:translateY(-6px) scale(1.03);
-
-    box-shadow:
-        0 18px 40px rgba(0,0,0,.12),
-        0 6px 18px rgba(176,141,87,.18);
-
-}
-
-.gallery-image:hover{
-
-    transform:scale(1.02);
-
-}
-
-.loading{
-
-    grid-column:1/-1;
-
-    text-align:center;
-
-    color:#777;
-
-    padding:40px 0;
-
-}
-
-
-/* ===========================================
-   LIGHTBOX
-=========================================== */
-
-#lightbox{
-
-    display:none;
-
-    position:fixed;
-
-    inset:0;
-
-    width:100vw;
-
-    height:100vh;
-
-    background:#ffffff;
-
-    z-index:99999;
-
-    justify-content:center;
-
-    align-items:center;
+    padding:95px 20px 85px;
 
     overflow:hidden;
 
 }
 
-#lightboxImage{
 
-    max-width:92vw;
+/* Yaprak efekti */
 
-    max-height:88vh;
+.hero::before{
 
-    width:auto;
-
-    height:auto;
-
-    object-fit:contain;
-
-    user-select:none;
-
-    -webkit-user-select:none;
-
-    -webkit-touch-callout:none;
-
-    touch-action:pan-y;
-
-    transition:opacity .2s;
-
-}
-
-#closeLightbox{
+    content:"";
 
     position:absolute;
 
-    top:18px;
+    inset:0;
 
-    right:22px;
+    opacity:.08;
 
-    font-size:42px;
+    background:
+    radial-gradient(circle at 15% 20%,#D6B77A 0%,transparent 28%),
+    radial-gradient(circle at 90% 10%,#D6B77A 0%,transparent 22%),
+    radial-gradient(circle at 85% 85%,#D6B77A 0%,transparent 26%),
+    radial-gradient(circle at 10% 90%,#D6B77A 0%,transparent 24%);
 
-    color:#222;
-
-    cursor:pointer;
-
-    z-index:100000;
-
-}
-/* ===========================================
-   MOBİL UYUMLULUK
-=========================================== */
-
-@media (max-width:768px){
-
-    .hero{
-
-        padding:30px 15px;
-
-    }
-
-    .hero h1{
-
-        font-size:34px;
-
-    }
-
-    .ampersand{
-
-        font-size:28px;
-
-    }
-
-    .gallery-section{
-
-        padding:15px;
-
-    }
-
-    #photoGallery{
-
-        grid-template-columns:repeat(2,1fr);
-
-        gap:8px;
-
-    }
-
-    .gallery-image{
-
-        border-radius:8px;
-
-    }
-
-    #lightboxImage{
-
-        max-width:95vw;
-
-        max-height:84vh;
-
-    }
-
-    #closeLightbox{
-
-        top:14px;
-
-        right:18px;
-
-        font-size:38px;
-
-    }
+    pointer-events:none;
 
 }
 
 
-@media (max-width:420px){
+.welcome{
 
-    #photoGallery{
+    position:relative;
 
-        gap:6px;
+    font-size:15px;
 
-    }
+    color:var(--text-soft);
 
-    #uploadBtn{
+    letter-spacing:1.8px;
 
-        width:100%;
+    text-transform:uppercase;
 
-        max-width:300px;
-
-    }
+    margin-bottom:36px;
 
 }
 
 
-/* ===========================================
-   ANİMASYONLAR
-=========================================== */
+.hero h1{
 
-.gallery-image{
+    position:relative;
 
-    animation:fadeIn .25s ease;
+    font-family:"Cinzel",serif;
 
-}
+    font-size:66px;
 
-@keyframes fadeIn{
+    font-weight:600;
 
-    from{
+    color:var(--gold-dark);
 
-        opacity:0;
+    letter-spacing:6px;
 
-        transform:scale(.97);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:scale(1);
-
-    }
+    line-height:1.05;
 
 }
 
 
-/* ===========================================
-   KAYDIRMA İÇİN HAZIRLIK
-=========================================== */
+.ampersand{
 
-#lightboxImage{
+    position:relative;
 
-    pointer-events:auto;
+    font-family:"Cinzel",serif;
 
-}
+    font-size:48px;
 
-#lightbox{
+    color:var(--gold);
 
-    -webkit-overflow-scrolling:touch;
-
-}
-
-img{
-
-    -webkit-user-drag:none;
+    margin:16px 0;
 
 }
 
 
-/* ===========================================
-   BİTİŞ
-=========================================== */
+.date{
+
+    position:relative;
+
+    margin-top:38px;
+
+    font-size:18px;
+
+    color:var(--text-soft);
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+
+}
+
+
+/* Altın çizgi */
+
 .hero-divider{
 
-    width:120px;
+    width:150px;
 
     height:2px;
 
-    margin:28px auto 0;
+    margin:34px auto 0;
+
+    border-radius:999px;
+
+    background:linear-gradient(
+
+        90deg,
+
+        transparent,
+
+        var(--gold),
+
+        transparent
+
+    );
+
+}
+/*==================================================
+  BUSE & SAMET
+  PREMIUM WEDDING THEME
+  BÖLÜM 2
+==================================================*/
+
+
+/* HERO KARTI */
+
+.hero{
+
+    max-width:920px;
+
+    margin:50px auto 70px;
+
+    background:rgba(255,255,255,.72);
+
+    backdrop-filter:blur(14px);
+
+    -webkit-backdrop-filter:blur(14px);
+
+    border:1px solid rgba(214,183,122,.35);
+
+    border-radius:34px;
+
+    box-shadow:
+        0 30px 70px rgba(0,0,0,.08),
+        inset 0 0 0 1px rgba(255,255,255,.45);
+
+}
+
+
+/* ÜST ALTIN ÇİZGİ */
+
+.hero::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+
+    top:22px;
+
+    transform:translateX(-50%);
+
+    width:90px;
+
+    height:3px;
 
     border-radius:999px;
 
     background:linear-gradient(
         90deg,
         transparent,
-        #D6B77A,
+        var(--gold),
         transparent
     );
 
 }
-.camera-icon{
 
-    width:20px;
-    height:20px;
 
-    fill:none;
+/* İSİMLER */
 
-    stroke:#ffffff;
+.hero h1{
 
-    stroke-width:1.8;
+    text-shadow:
 
-    stroke-linecap:round;
+        0 2px 12px rgba(185,147,91,.18);
 
-    stroke-linejoin:round;
+}
 
-    margin-right:8px;
+
+/* & */
+
+.ampersand{
+
+    text-shadow:
+
+        0 0 18px rgba(214,183,122,.35);
+
+}
+
+
+/* TARİH */
+
+.date{
+
+    position:relative;
+
+    display:inline-block;
+
+    padding:0 18px;
+
+}
+
+
+/* TARİHİN YAN ÇİZGİLERİ */
+
+.date::before,
+
+.date::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:50%;
+
+    width:34px;
+
+    height:1px;
+
+    background:rgba(214,183,122,.7);
+
+}
+
+.date::before{
+
+    left:-26px;
+
+}
+
+.date::after{
+
+    right:-26px;
+
+}
+
+
+/* ALT ÇİZGİ */
+
+.hero-divider{
+
+    width:170px;
+
+    height:2px;
+
+    margin-top:34px;
+
+    opacity:.9;
+
+}
+
+
+/* HERO HOVER */
+
+.hero:hover{
+
+    transform:translateY(-2px);
+
+    transition:.45s;
+
+    box-shadow:
+
+        0 35px 85px rgba(0,0,0,.10),
+
+        inset 0 0 0 1px rgba(255,255,255,.55);
+
+}
+
+
+/* YUMUŞAK PARLAMA */
+
+.hero::before{
+
+    animation:heroGlow 8s ease-in-out infinite;
+
+}
+
+
+@keyframes heroGlow{
+
+    0%{
+
+        opacity:.05;
+
+    }
+
+    50%{
+
+        opacity:.12;
+
+    }
+
+    100%{
+
+        opacity:.05;
+
+    }
+	/*==================================================
+  BUSE & SAMET
+  PREMIUM WEDDING THEME
+  BÖLÜM 3
+  FOTOĞRAF YÜKLEME
+==================================================*/
+
+.upload-section{
+
+    width:min(92%,860px);
+
+    margin:0 auto 90px;
+
+    background:rgba(255,255,255,.78);
+
+    backdrop-filter:blur(14px);
+
+    -webkit-backdrop-filter:blur(14px);
+
+    border:1px solid rgba(214,183,122,.28);
+
+    border-radius:32px;
+
+    padding:60px 45px;
+
+    text-align:center;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.07);
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+
+.upload-section::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:320px;
+
+    height:320px;
+
+    border-radius:50%;
+
+    background:radial-gradient(
+        rgba(214,183,122,.18),
+        transparent 70%
+    );
+
+    top:-170px;
+
+    right:-120px;
+
+}
+
+
+.upload-section::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:260px;
+
+    height:260px;
+
+    border-radius:50%;
+
+    background:radial-gradient(
+        rgba(214,183,122,.12),
+        transparent 70%
+    );
+
+    left:-100px;
+
+    bottom:-140px;
+
+}
+
+
+.upload-section h2{
+
+    position:relative;
+
+    font-family:"Cinzel",serif;
+
+    font-size:34px;
+
+    font-weight:600;
+
+    color:var(--gold-dark);
+
+    letter-spacing:2px;
+
+    margin-bottom:18px;
+
+}
+
+
+.upload-section h2::after{
+
+    content:"";
+
+    display:block;
+
+    width:90px;
+
+    height:2px;
+
+    margin:20px auto 0;
+
+    border-radius:999px;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        var(--gold),
+        transparent
+    );
+
+}
+
+
+.description{
+
+    position:relative;
+
+    max-width:520px;
+
+    margin:0 auto 35px;
+
+    font-size:16px;
+
+    color:var(--text-soft);
+
+    line-height:1.9;
+
+}
+
+
+#fileInput{
+
+    display:block;
+
+    width:100%;
+
+    max-width:420px;
+
+    margin:0 auto 28px;
+
+    padding:18px;
+
+    border:2px dashed rgba(214,183,122,.45);
+
+    border-radius:18px;
+
+    background:#fffdfa;
+
+    color:var(--text-soft);
+
+    cursor:pointer;
+
+    transition:.35s;
+
+}
+
+
+#fileInput:hover{
+
+    border-color:var(--gold);
+
+    background:#ffffff;
+
+}
+
+
+#uploadBtn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    min-width:230px;
+
+    height:58px;
+
+    padding:0 34px;
+
+    border:none;
+
+    border-radius:999px;
+
+    cursor:pointer;
+
+    background:linear-gradient(
+        135deg,
+        #D6B77A,
+        #B9935B
+    );
+
+    color:#ffffff;
+
+    font-family:"Montserrat",sans-serif;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    letter-spacing:.6px;
+
+    box-shadow:
+        0 14px 35px rgba(185,147,91,.28);
+
+    transition:all .35s ease;
+
+}
+
+
+#uploadBtn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 20px 45px rgba(185,147,91,.34);
+
+}
+
+
+#uploadBtn:active{
+
+    transform:scale(.98);
+
+}
+
+
+#uploadStatus{
+
+    margin-top:24px;
+
+    min-height:26px;
+
+    font-size:15px;
+
+    font-weight:500;
+
+    color:var(--gold-dark);
+
+}
 
 }
