@@ -1,51 +1,127 @@
-const uploadButton = document.getElementById("uploadBtn");
-const fileInput = document.getElementById("fileInput");
+import {
+  db,
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  orderBy,
+  serverTimestamp
+} from "./firebase.js";
 
-uploadButton.addEventListener("click", function () {
-  fileInput.click();
+// ==============================
+// Cloudinary Ayarları
+// ==============================
+
+const CLOUD_NAME = "BURAYA_CLOUDINARY_CLOUD_NAME";
+const UPLOAD_PRESET = "BURAYA_UPLOAD_PRESET";
+
+// ==============================
+// HTML Elemanları
+// ==============================
+
+const fileInput = document.getElementById("fileInput");
+const uploadBtn = document.getElementById("uploadBtn");
+const uploadStatus = document.getElementById("uploadStatus");
+const photoGallery = document.getElementById("photoGallery");
+
+// ==============================
+// Fotoğraf Seç
+// ==============================
+
+uploadBtn.addEventListener("click", () => {
+    fileInput.click();
 });
 
-fileInput.addEventListener("change", async function () {
+fileInput.addEventListener("change", async () => {
 
-  const file = fileInput.files[0];
+    const file = fileInput.files[0];
 
-  if (!file) {
-    return;
-  }
+    if (!file) return;
 
-  const formData = new FormData();
+    uploadStatus.textContent = "Fotoğraf yükleniyor...";
 
-  formData.append("file", file);
-  formData.append("upload_preset", "buse_samet");
-  formData.append("tags", "buse_samet");
+    uploadBtn.disabled = true;
 
-  try {
+    try {
 
-    const response = await fetch(
-      "https://api.cloudinary.com/v1_1/p0wgo1yp/image/upload",
-      {
-        method: "POST",
-        body: formData
-      }
-    );
+        const formData = new FormData();
 
-    const data = await response.json();
+        formData.append("file", file);
+        formData.append("upload_preset", UPLOAD_PRESET);
 
-    console.log(data);
+        const response = await fetch(
+            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+            {
+                method: "POST",
+                body: formData
+            }
+        );
 
-    if (data.secure_url) {
-      alert("Fotoğraf başarıyla yüklendi ❤️");
-    } else {
-      alert("Hata: " + JSON.stringify(data));
+        const data = await response.json();
+
+        if (!data.secure_url) {
+            throw new Error("Cloudinary yükleme hatası.");
+        }
+
+        await addDoc(collection(db, "photos"), {
+
+            imageUrl: data.secure_url,
+            publicId: data.public_id,
+            createdAt: serverTimestamp()
+
+        });
+
+        uploadStatus.textContent = "✅ Fotoğraf başarıyla yüklendi.";
+
+    } catch (err) {
+
+        console.error(err);
+
+        uploadStatus.textContent = "❌ Yükleme başarısız.";
+
     }
 
-  } catch (error) {
+    uploadBtn.disabled = false;
 
-    alert("Bağlantı hatası oluştu");
-    console.log(error);
-
-  }
+    fileInput.value = "";
 
 });
 
+// ==============================
+// Canlı Galeri
+// ==============================
 
+const photoQuery = query(
+
+    collection(db, "photos"),
+    orderBy("createdAt", "desc")
+
+);
+
+onSnapshot(photoQuery, (snapshot) => {
+
+    photoGallery.innerHTML = "";
+
+    if (snapshot.empty) {
+
+        photoGallery.innerHTML =
+            "<div class='loading'>Henüz fotoğraf yüklenmedi.</div>";
+
+        return;
+    }
+
+    snapshot.forEach((doc) => {
+
+        const photo = doc.data();
+
+        const img = document.createElement("img");
+
+        img.src = photo.imageUrl;
+        img.loading = "lazy";
+        img.className = "gallery-image";
+
+        photoGallery.appendChild(img);
+
+    });
+
+});
