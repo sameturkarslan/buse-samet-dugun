@@ -576,34 +576,3 @@ img{
     );
 
 }
-#uploadBtn{
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-
-    padding:14px 32px;
-
-    border-radius:999px;
-
-    border:none;
-
-    background:#D6B77A;
-
-    color:#ffffff;
-
-    font-family:'Montserrat', sans-serif;
-
-    font-size:15px;
-
-    cursor:pointer;
-
-}
-
-
-.camera-icon{
-
-    font-size:20px;
-
-}
