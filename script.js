@@ -135,6 +135,9 @@ snapshot.forEach((doc) => {
   const lightboxImage = document.getElementById("lightboxImage");
   const closeLightbox = document.getElementById("closeLightbox");
 
+  let startX = 0;
+  let endX = 0;
+
 
   images.forEach((img, index) => {
 
@@ -151,41 +154,26 @@ snapshot.forEach((doc) => {
   });
 
 
-  closeLightbox.addEventListener("click", () => {
+  closeLightbox.onclick = () => {
 
     lightbox.style.display = "none";
 
-  });
-
-
-  lightbox.addEventListener("click", (e) => {
-
-    if (e.target === lightbox) {
-
-      lightbox.style.display = "none";
-
-    }
-
-  });
-
-
-  let startX = 0;
+  };
 
 
   lightboxImage.addEventListener("touchstart", (e) => {
 
-    startX = e.touches[0].clientX;
+    startX = e.changedTouches[0].screenX;
 
   });
 
 
   lightboxImage.addEventListener("touchend", (e) => {
 
-    let endX = e.changedTouches[0].clientX;
+    endX = e.changedTouches[0].screenX;
+
 
     if (startX - endX > 50) {
-
-      // sola kaydır → sonraki fotoğraf
 
       currentIndex++;
 
@@ -200,8 +188,6 @@ snapshot.forEach((doc) => {
 
     if (endX - startX > 50) {
 
-      // sağa kaydır → önceki fotoğraf
-
       currentIndex--;
 
       if (currentIndex < 0) {
@@ -213,5 +199,16 @@ snapshot.forEach((doc) => {
     }
 
   });
+
+
+  lightbox.onclick = (e) => {
+
+    if (e.target === lightbox) {
+
+      lightbox.style.display = "none";
+
+    }
+
+  };
 
 }
