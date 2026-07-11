@@ -29,65 +29,61 @@ const photoGallery = document.getElementById("photoGallery");
 // ==============================
 
 uploadBtn.addEventListener("click", () => {
-    fileInput.click();
+  fileInput.click();
 });
 
 fileInput.addEventListener("change", async () => {
 
-    const file = fileInput.files[0];
+  const file = fileInput.files[0];
 
-    if (!file) return;
+  if (!file) return;
 
-    uploadStatus.textContent = "Fotoğraf yükleniyor...";
+  uploadStatus.textContent = "Fotoğraf yükleniyor...";
+  uploadBtn.disabled = true;
 
-    uploadBtn.disabled = true;
+  try {
 
-    try {
+    const formData = new FormData();
 
-        const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", UPLOAD_PRESET);
 
-        formData.append("file", file);
-        formData.append("upload_preset", UPLOAD_PRESET);
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+      {
+        method: "POST",
+        body: formData
+      }
+    );
 
-        const response = await fetch(
-            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-            {
-                method: "POST",
-                body: formData
-            }
-        );
+    const data = await response.json();
 
-        const data = await response.json();
+    console.log(data);
+    alert(JSON.stringify(data));
 
-        if (!data.secure_url) {
-            throw new Error("Cloudinary yükleme hatası.");
-        }
-
-        await addDoc(collection(db, "photos"), {
-          console.log(data);
-alert(JSON.stringify(data));
-
-            imageUrl: data.secure_url,
-            publicId: data.public_id,
-            createdAt: serverTimestamp()
-
-        });
-
-        uploadStatus.textContent = "✅ Fotoğraf başarıyla yüklendi.";
-
-    } catch (err) {
-
-        console.error(err);
-
-        console.error(err);
-
-uploadStatus.textContent = "❌ " + err.message;
-
+    if (!data.secure_url) {
+      throw new Error("Cloudinary yükleme hatası.");
     }
 
-    uploadBtn.disabled = false;
+    await addDoc(collection(db, "photos"), {
+      imageUrl: data.secure_url,
+      publicId: data.public_id,
+      createdAt: serverTimestamp()
+    });
 
-    fileInput.value = "";
+    uploadStatus.textContent = "✅ Fotoğraf başarıyla yüklendi.";
+
+  } catch (err) {
+
+    console.error(err);
+    console.error(err.message);
+
+    uploadStatus.textContent = "❌ " + (err.message || "Yükleme başarısız.");
+
+  }
+
+  uploadBtn.disabled = false;
+  fileInput.value = "";
 
 });
 
@@ -96,36 +92,34 @@ uploadStatus.textContent = "❌ " + err.message;
 // ==============================
 
 const photoQuery = query(
-
-    collection(db, "photos"),
-    orderBy("createdAt", "desc")
-
+  collection(db, "photos"),
+  orderBy("createdAt", "desc")
 );
 
 onSnapshot(photoQuery, (snapshot) => {
 
-    photoGallery.innerHTML = "";
+  photoGallery.innerHTML = "";
 
-    if (snapshot.empty) {
+  if (snapshot.empty) {
 
-        photoGallery.innerHTML =
-            "<div class='loading'>Henüz fotoğraf yüklenmedi.</div>";
+    photoGallery.innerHTML =
+      "<div class='loading'>Henüz fotoğraf yüklenmedi.</div>";
 
-        return;
-    }
+    return;
+  }
 
-    snapshot.forEach((doc) => {
+  snapshot.forEach((doc) => {
 
-        const photo = doc.data();
+    const photo = doc.data();
 
-        const img = document.createElement("img");
+    const img = document.createElement("img");
 
-        img.src = photo.imageUrl;
-        img.loading = "lazy";
-        img.className = "gallery-image";
+    img.src = photo.imageUrl;
+    img.loading = "lazy";
+    img.className = "gallery-image";
 
-        photoGallery.appendChild(img);
+    photoGallery.appendChild(img);
 
-    });
+  });
 
 });
