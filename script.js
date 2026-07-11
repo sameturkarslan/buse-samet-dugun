@@ -28,6 +28,22 @@ const lightbox = document.getElementById("lightbox");
 const lightboxImage = document.getElementById("lightboxImage");
 const closeLightbox = document.getElementById("closeLightbox");
 
+const fileInput = document.getElementById("fileInput");
+const fileName = document.getElementById("fileName");
+
+fileInput.addEventListener("change", function(){
+
+    if(this.files.length > 0){
+
+        fileName.textContent = this.files[0].name;
+
+    }else{
+
+        fileName.textContent = "Henüz fotoğraf seçilmedi";
+
+    }
+
+});
 /* ===========================================
    DEĞİŞKENLER
 =========================================== */
