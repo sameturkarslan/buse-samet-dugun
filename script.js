@@ -77,7 +77,9 @@ fileInput.addEventListener("change", async () => {
 
         console.error(err);
 
-        uploadStatus.textContent = "❌ Yükleme başarısız.";
+        console.error(err);
+
+uploadStatus.textContent = "❌ " + err.message;
 
     }
 
