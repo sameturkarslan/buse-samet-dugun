@@ -576,16 +576,34 @@ img{
     );
 
 }
+#uploadBtn{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    padding:14px 32px;
+
+    border-radius:999px;
+
+    border:none;
+
+    background:#D6B77A;
+
+    color:#ffffff;
+
+    font-family:'Montserrat', sans-serif;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+}
+
+
 .camera-icon{
 
-    width:22px;
-    height:22px;
-    fill:none;
-    stroke:currentColor;
-    stroke-width:2;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-
-    margin-right:8px;
+    font-size:20px;
 
 }
