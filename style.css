@@ -380,13 +380,6 @@ body::after{
  CUSTOM FILE UPLOAD
 ==============================*/
 
-#fileInput{
-
-    display:none;
-
-}
-
-
 .upload-box{
 
     margin-bottom:30px;
