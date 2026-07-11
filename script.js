@@ -121,5 +121,5 @@ onSnapshot(photoQuery, (snapshot) => {
     photoGallery.appendChild(img);
 
   });
-
+  addGalleryEvents();
 });
