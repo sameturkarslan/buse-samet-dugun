@@ -1,172 +1,159 @@
-<!DOCTYPE html>
-<html lang="tr">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>BUSE & SAMET </title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-</head>
+/*==============================
+ BUSE & SAMET
+ PREMIUM WEDDING PAGE
+==============================*/
 
 <body>
 
-    <!-- =========================
-         HERO
-    ========================== -->
 
-    <header class="hero">
+<!-- HERO -->
 
-        <p class="welcome">
+<section class="hero">
 
-            Mutluluğumuza ortak olduğunuz için teşekkür ederiz.
-
-        </p>
-
-        <h1>Buse</h1>
-
-        <div class="ampersand">&</div>
-
-        <h1>Samet</h1>
-
-        <p class="date">
-
-            19 Eylül 2026
-
-        </p>
-
-        <div class="hero-divider"></div>
-
-    </header>
+    <p class="welcome">
+        Mutluluğumuza ortak olun
+    </p>
 
 
+    <h1>
+        BUSE
+        <br>
+        <span class="ampersand">&</span>
+        <br>
+        SAMET
+    </h1>
 
-    <!-- =========================
-         FOTOĞRAF YÜKLEME
-    ========================== -->
 
-    <section class="upload-section">
+    <p class="date">
+        2026
+    </p>
 
-        <h2>
 
-            Düğün Fotoğraf Albümü
+    <div class="hero-divider"></div>
 
-        </h2>
-
-        <p class="description">
-
-            Bu özel günümüzde çektiğiniz
-            fotoğrafları bizimle paylaşabilirsiniz.
-
-        </p>
-
-    <<input
-    type="file"
-    id="fileInput"
-    accept="image/*">
-
-<button id="uploadBtn">
-
-    Fotoğraf Yükle
-
-</button>
-
-<p id="uploadStatus"></p>
-
-    </section>
+</section>
 
 
 
-    <!-- =========================
-         GALERİ
-    ========================== -->
 
-    <section class="gallery-section">
+<!-- FOTOĞRAF YÜKLEME -->
 
-        <h2>
+<section class="upload-section">
 
-            Anılarımız
 
-        </h2>
+    <h2>
+        Fotoğraf Paylaş
+    </h2>
 
-        <div class="gallery-divider"></div>
 
-        <div id="photoGallery">
+    <p class="description">
 
-            <div class="loading">
+        Düğünümüzden güzel anıları bizimle paylaşabilirsiniz.
 
-                Fotoğraflar yükleniyor...
+    </p>
 
-            </div>
+
+
+    <input
+        type="file"
+        id="fileInput"
+        accept="image/*">
+
+
+
+    <button id="uploadBtn">
+
+        Fotoğraf Yükle
+
+    </button>
+
+
+
+    <p id="uploadStatus"></p>
+
+
+</section>
+
+
+
+
+
+<!-- ANILARIMIZ -->
+
+<section class="gallery-section">
+
+
+    <h2>
+        Anılarımız
+    </h2>
+
+
+    <div class="gallery-divider"></div>
+
+
+
+    <div id="photoGallery">
+
+        <div class="loading">
+
+            Fotoğraflar yükleniyor...
 
         </div>
 
-    </section>
-
-
-
-    <!-- =========================
-         LIGHTBOX
-    ========================== -->
-
-    <div id="lightbox">
-
-        <span id="closeLightbox">
-
-            &times;
-
-        </span>
-
-        <img
-            id="lightboxImage"
-            src=""
-            alt="Fotoğraf">
 
     </div>
 
 
-
-    <!-- =========================
-         FOOTER
-    ========================== -->
-
-    <footer class="footer">
-
-        <div class="footer-divider"></div>
-
-        <p>
-
-            Sevincimizi paylaştığınız ve
-            en özel anlarımızı ölümsüzleştirdiğiniz
-            için teşekkür ederiz.
-
-        </p>
-
-        <p>
-
-            BUSE & SAMET ❤️
-
-        </p>
-
-    </footer>
+</section>
 
 
 
-    <script
-        type="module"
-        src="script.js">
-    </script>
+
+
+<!-- LIGHTBOX -->
+
+<div id="lightbox">
+
+
+    <span id="closeLightbox">
+
+        ×
+
+    </span>
+
+
+
+    <img
+        id="lightboxImage"
+        src=""
+        alt="">
+
+</div>
+
+
+
+
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+
+    <div class="footer-divider"></div>
+
+
+    <p>
+        Buse & Samet
+    </p>
+
+
+    <p>
+        En güzel anılarımızla...
+    </p>
+
+
+</footer>
+
+
 
 </body>
-
-</html>
