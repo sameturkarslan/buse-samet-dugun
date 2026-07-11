@@ -275,6 +275,9 @@ footer{
   z-index:10000;
 
 }
+#lightboxImage {
+  touch-action: pan-y;
+}
 
 @keyframes zoomIn{
 
