@@ -1,12 +1,16 @@
 // Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
 import {
   getFirestore,
   collection,
   addDoc,
+  deleteDoc,
+  doc,
   onSnapshot,
   query,
-  orderBy
+ orderBy,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 // Firebase ayarları
@@ -24,4 +28,14 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // Dışarı aktar
-export { db, collection, addDoc, onSnapshot, query, orderBy };
+export {
+  db,
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  orderBy,
+  serverTimestamp
+};
