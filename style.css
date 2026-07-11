@@ -1,306 +1,210 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+  box-sizing: border-box;
 }
 
-body{
 
-    background:#f8f5ef;
-    font-family:Georgia, serif;
-    color:#4a4034;
-
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
 }
 
-.container{
 
-    width:100%;
-    max-width:900px;
-    margin:auto;
-    padding:30px 20px 60px;
+/* ==============================
+   GALERİ
+============================== */
 
-}
 
-.hero{
+#photoGallery {
 
-    text-align:center;
-    margin-top:20px;
-    margin-bottom:50px;
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 10px;
+
+  padding: 15px;
 
 }
 
-.small-title{
 
-    letter-spacing:2px;
-    font-size:14px;
-    color:#8a7b68;
-    margin-bottom:20px;
-    text-transform:uppercase;
+.gallery-image {
 
-}
+  width: 100%;
 
-.hero h1{
+  aspect-ratio: 1 / 1;
 
-    font-size:64px;
-    font-weight:normal;
-    color:#7b6248;
+  object-fit: cover;
+
+  cursor: pointer;
+
+  border-radius: 8px;
 
 }
 
-.amp{
 
-    display:block;
-    font-size:38px;
-    color:#b89b6c;
-    margin:8px 0;
+/* ==============================
+   LIGHTBOX
+============================== */
 
-}
-
-.line{
-
-    width:120px;
-    height:2px;
-    background:#c8b28a;
-    margin:30px auto;
-
-}
-
-.date{
-
-    font-size:22px;
-    letter-spacing:3px;
-    color:#8a7b68;
-
-}
-
-.card{
-
-    background:#ffffff;
-    border-radius:20px;
-    padding:35px;
-    text-align:center;
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
-    margin-bottom:40px;
-
-}
-
-.card h2{
-
-    font-size:30px;
-    margin-bottom:15px;
-    color:#7b6248;
-
-}
-
-.card p{
-
-    font-size:18px;
-    line-height:1.7;
-    margin-bottom:25px;
-
-}
-
-#uploadBtn{
-
-    background:#b89b6c;
-    color:white;
-    border:none;
-    border-radius:50px;
-    padding:16px 35px;
-    font-size:18px;
-    cursor:pointer;
-    transition:.3s;
-
-}
-
-#uploadBtn:hover{
-
-    background:#9f845c;
-    transform:scale(1.05);
-
-}
-
-#uploadStatus{
-
-    margin-top:20px;
-    font-size:16px;
-    color:#7b6248;
-
-}
-
-.gallery{
-
-    margin-top:40px;
-
-}
-
-.gallery h2{
-
-    text-align:center;
-    font-size:34px;
-    margin-bottom:30px;
-    color:#7b6248;
-
-}
-
-#photoGallery{
-
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:18px;
-
-}
-
-#photoGallery img{
-
-    width:100%;
-    border-radius:16px;
-    display:block;
-    transition:.3s;
-    box-shadow:0 6px 18px rgba(0,0,0,.12);
-
-}
-
-#photoGallery img:hover{
-
-    transform:scale(1.03);
-
-}
-
-.loading{
-
-    text-align:center;
-    width:100%;
-    padding:30px;
-    color:#8a7b68;
-    font-size:18px;
-
-}
-
-footer{
-
-    text-align:center;
-    margin-top:60px;
-    color:#8a7b68;
-    font-size:18px;
-
-}
-
-@media(max-width:600px){
-
-.hero h1{
-
-    font-size:46px;
-
-}
-
-.card{
-
-    padding:25px;
-
-}
-
-.card h2{
-
-    font-size:24px;
-
-}
-
-.card p{
-
-    font-size:16px;
-
-}
-
-#uploadBtn{
-
-    width:100%;
-
-}
-
-.gallery h2{
-
-    font-size:28px;
-
-}
-
-}
-
-/* ===========================
-   Lightbox
-=========================== */
 
 #lightbox {
 
-  display:none;
-  position:fixed;
-  z-index:9999;
-  top:0;
-  left:0;
+  display: none;
 
-  width:100%;
-  height:100%;
+  position: fixed;
 
-  background:rgba(0,0,0,0.95);
+  z-index: 99999;
 
-  justify-content:center;
-  align-items:center;
+  top: 0;
+
+  left: 0;
+
+  width: 100vw;
+
+  height: 100vh;
+
+  background: rgba(0,0,0,0.95);
+
+  justify-content: center;
+
+  align-items: center;
 
 }
+
+
+/* Açılan büyük fotoğraf */
 
 
 #lightboxImage {
 
-  width:100%;
-  height:100%;
+  max-width: 90vw;
 
-  object-fit:contain;
+  max-height: 85vh;
+
+  width: auto;
+
+  height: auto;
+
+  object-fit: contain;
+
+  touch-action: pan-y;
 
 }
+
+
+/* Kapatma işareti */
 
 
 #closeLightbox {
 
-  position:absolute;
+  position: absolute;
 
-  top:15px;
-  right:25px;
+  top: 20px;
 
-  color:white;
+  right: 25px;
 
-  font-size:50px;
+  color: white;
 
-  cursor:pointer;
+  font-size: 45px;
 
-  z-index:10000;
+  cursor: pointer;
+
+  z-index: 100000;
 
 }
+
+/* ==============================
+   UPLOAD ALANI
+============================== */
+
+
+#fileInput {
+
+  display: none;
+
+}
+
+
+#uploadBtn {
+
+  cursor: pointer;
+
+}
+
+
+/* ==============================
+   YÜKLEME DURUMU
+============================== */
+
+
+#uploadStatus {
+
+  text-align: center;
+
+  margin: 15px;
+
+}
+
+
+/* ==============================
+   MOBİL UYUMLULUK
+============================== */
+
+
+@media (max-width: 600px) {
+
+
+  #photoGallery {
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 8px;
+
+    padding: 10px;
+
+  }
+
+
+  .gallery-image {
+
+    border-radius: 6px;
+
+  }
+
+
+  #lightboxImage {
+
+    max-width: 92vw;
+
+    max-height: 82vh;
+
+  }
+
+
+  #closeLightbox {
+
+    top: 15px;
+
+    right: 20px;
+
+    font-size: 40px;
+
+  }
+
+}
+
+
+/* ==============================
+   FOTOĞRAF KAYDIRMA HAZIRLIĞI
+============================== */
+
+
 #lightboxImage {
-  touch-action: pan-y;
-}
 
-@keyframes zoomIn{
+  user-select: none;
 
-    from{
-        transform:scale(.8);
-        opacity:0;
-    }
+  -webkit-user-select: none;
 
-    to{
-        transform:scale(1);
-        opacity:1;
-    }
-
-}
-
-#lightbox img#lightboxImage {
-
-  width:100vw !important;
-  height:100vh !important;
-
-  max-width:none !important;
-  max-height:none !important;
-
-  object-fit:cover !important;
+  -webkit-touch-callout: none;
 
 }
