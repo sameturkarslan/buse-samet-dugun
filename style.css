@@ -458,38 +458,6 @@ body::after{
 }
 
 
-#fileInput::file-selector-button{
-
-    border:none;
-
-    background:var(--gold);
-
-    color:#fff;
-
-    padding:12px 20px;
-
-    border-radius:999px;
-
-    margin-right:18px;
-
-    font-family:"Montserrat",sans-serif;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:.30s;
-
-}
-
-
-#fileInput::file-selector-button:hover{
-
-    background:var(--gold-dark);
-
-}
-
-
 /*==============================
  UPLOAD BUTTON
 ==============================*/
