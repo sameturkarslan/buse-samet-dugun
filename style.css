@@ -187,7 +187,17 @@ body{
 
 #uploadBtn:hover{
 
-    transform:scale(1.03);
+    transform:translateY(-3px) scale(1.03);
+
+    box-shadow:0 16px 35px rgba(176,141,87,.40);
+
+}
+
+#uploadBtn:active{
+
+    transform:translateY(1px) scale(.98);
+
+    box-shadow:0 6px 15px rgba(176,141,87,.25);
 
 }
 
