@@ -5,15 +5,16 @@ import {
   getFirestore,
   collection,
   addDoc,
-  deleteDoc,
-  doc,
   onSnapshot,
   query,
- orderBy,
+  orderBy,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-// Firebase ayarları
+/* ===========================================
+   FIREBASE CONFIG
+=========================================== */
+
 const firebaseConfig = {
   apiKey: "AIzaSyDuNX14Q-a1Xgh-pNgyFd1OIInRI0Tnxi8",
   authDomain: "buse-samet-dugun.firebaseapp.com",
@@ -23,17 +24,21 @@ const firebaseConfig = {
   appId: "1:516688924747:web:9597a254d4de392f95bdce"
 };
 
-// Firebase'i başlat
+/* ===========================================
+   FIREBASE BAŞLAT
+=========================================== */
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Dışarı aktar
+/* ===========================================
+   EXPORT
+=========================================== */
+
 export {
   db,
   collection,
   addDoc,
-  deleteDoc,
-  doc,
   onSnapshot,
   query,
   orderBy,
