@@ -4,7 +4,9 @@
 <head>
 
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
   <title>Buse & Samet</title>
 
@@ -14,95 +16,106 @@
 
 <body>
 
-<div class="container">
+  <!-- =========================
+       ÜST ALAN
+  ========================== -->
 
-    <!-- Başlık -->
+  <header class="hero">
 
-    <section class="hero">
+    <p class="welcome">
+      Mutluluğumuza ortak olduğunuz için teşekkür ederiz.
+    </p>
 
-        <p class="small-title">
-            Mutluluğumuzu Paylaşmaya Davetlisiniz
-        </p>
+    <h1>Buse</h1>
 
-        <h1>Buse</h1>
+    <div class="ampersand">&</div>
 
-        <span class="amp">&</span>
+    <h1>Samet</h1>
 
-        <h1>Samet</h1>
+    <p class="date">
+      19 Eylül 2026
+    </p>
 
-        <div class="line"></div>
-
-        <p class="date">
-            19 Eylül 2026
-        </p>
-
-    </section>
+  </header>
 
 
-    <!-- Fotoğraf Yükleme -->
+  <!-- =========================
+       FOTOĞRAF YÜKLEME
+  ========================== -->
 
-    <section class="card">
+  <section class="upload-section">
 
-        <h2>Düğün Fotoğraf Albümü</h2>
+    <h2>Düğün Fotoğraf Albümü</h2>
 
-        <p>
-            Bu özel günümüzde çektiğiniz
-            fotoğrafları bizimle paylaşabilirsiniz.
-        </p>
+    <p class="description">
+      Bu özel günümüzde çektiğiniz fotoğrafları
+      bizimle paylaşabilirsiniz.
+    </p>
 
-        <input
-            type="file"
-            id="fileInput"
-            accept="image/*"
-            hidden
-        >
+    <input
+      type="file"
+      id="fileInput"
+      accept="image/*">
 
-        <button id="uploadBtn">
+    <button id="uploadBtn">
+      📸 Fotoğraf Yükle
+    </button>
 
-            📸 Fotoğraf Yükle
+    <p id="uploadStatus"></p>
 
-        </button>
-
-        <p id="uploadStatus"></p>
-
-    </section>
+  </section>
 
 
+  <!-- =========================
+       GALERİ
+  ========================== -->
 
-    <!-- Galeri -->
+  <section class="gallery-section">
 
-    <section class="gallery">
+    <h2>Anılarımız ❤️</h2>
 
-        <h2>Anılarımız ❤️</h2>
+    <div id="photoGallery">
 
-        <div id="photoGallery">
+      <div class="loading">
 
-            <div class="loading">
+        Fotoğraflar yükleniyor...
 
-                Fotoğraflar yükleniyor...
+      </div>
 
-            </div>
+    </div>
 
-        </div>
-
-    </section>
+  </section>
 
 
+  <!-- =========================
+       LIGHTBOX
+  ========================== -->
 
-    <!-- Footer -->
+  <div id="lightbox">
 
-    <footer>
+    <span id="closeLightbox">
 
-        Sevgiyle...
+      &times;
 
-    </footer>
-<div id="lightbox">
-  <span id="closeLightbox">×</span>
-  <img id="lightboxImage">
-</div>
+    </span>
 
-<script type="module" src="script.js"></script>
+    <img
+      id="lightboxImage"
+      src=""
+      alt="Fotoğraf">
+
+  </div>
+
+
+  <!-- =========================
+       SCRIPT
+  ========================== -->
+
+  <script
+    type="module"
+    src="script.js">
+  </script>
 
 </body>
-</html>
 
+</html>
