@@ -15,13 +15,20 @@ html{
 
 body{
 
-    font-family:Arial,Helvetica,sans-serif;
+    font-family:"Montserrat", sans-serif;
 
-    background:#ffffff;
+    background:linear-gradient(
+        180deg,
+        #FCFAF6 0%,
+        #F8F4EE 45%,
+        #FDFBF8 100%
+    );
 
     color:#333;
 
     min-height:100vh;
+
+    line-height:1.6;
 
 }
 
