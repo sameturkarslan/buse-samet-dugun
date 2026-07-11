@@ -123,3 +123,44 @@ onSnapshot(photoQuery, (snapshot) => {
   });
   addGalleryEvents();
 });
+
+function addGalleryEvents() {
+
+  const images = document.querySelectorAll(".gallery-image");
+
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImage = document.getElementById("lightboxImage");
+  const closeLightbox = document.getElementById("closeLightbox");
+
+
+  images.forEach(img => {
+
+    img.addEventListener("click", () => {
+
+      lightboxImage.src = img.src;
+
+      lightbox.style.display = "flex";
+
+    });
+
+  });
+
+
+  closeLightbox.addEventListener("click", () => {
+
+    lightbox.style.display = "none";
+
+  });
+
+
+  lightbox.addEventListener("click", (e) => {
+
+    if (e.target === lightbox) {
+
+      lightbox.style.display = "none";
+
+    }
+
+  });
+
+}
