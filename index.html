@@ -3,129 +3,136 @@
 
 <head>
 
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-  <title>Buse & Samet</title>
+    <title>Buse & Samet</title>
 
-  <link rel="stylesheet" href="style.css">
-  
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 </head>
 
 <body>
 
-  <!-- =========================
-       ÜST ALAN
-  ========================== -->
+    <!-- HERO -->
 
-  <header class="hero">
+    <header class="hero">
 
-    <p class="welcome">
-      Mutluluğumuza ortak olduğunuz için teşekkür ederiz.
-    </p>
+        <p class="welcome">
 
-    <h1>Buse</h1>
+            Mutluluğumuza ortak olduğunuz için teşekkür ederiz.
 
-    <div class="ampersand">&</div>
+        </p>
 
-    <h1>Samet</h1>
+        <h1>Buse</h1>
 
-    <p class="date">
-      19 Eylül 2026
-    </p>
-<div class="hero-divider"></div>
-  </header>
+        <div class="ampersand">&</div>
 
+        <h1>Samet</h1>
 
-  <!-- =========================
-       FOTOĞRAF YÜKLEME
-  ========================== -->
+        <p class="date">
 
-  <section class="upload-section">
+            19 Eylül 2026
 
-    <h2>Düğün Fotoğraf Albümü</h2>
+        </p>
 
-    <p class="description">
-      Bu özel günümüzde çektiğiniz fotoğrafları
-      bizimle paylaşabilirsiniz.
-    </p>
+        <div class="hero-divider"></div>
 
-    <input
-      type="file"
-      id="fileInput"
-      accept="image/*">
-
-    <button id="uploadBtn">
-
-  <svg class="camera-icon" viewBox="0 0 24 24">
-    <path d="M4 7h3l1.5-2h7L17 7h3c1.1 0 2 .9 2 2v9c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V9c0-1.1.9-2 2-2z"/>
-    <circle cx="12" cy="13" r="3.5"/>
-  </svg>
-
-  <span>Fotoğraf Yükle</span>
-
-</button>
-
-    <p id="uploadStatus"></p>
-
-  </section>
+    </header>
 
 
-  <!-- =========================
-       GALERİ
-  ========================== -->
 
-  <section class="gallery-section">
+    <!-- FOTOĞRAF YÜKLE -->
 
-    <h2>Anılarımız ❤️</h2>
+    <section class="upload-section">
 
-    <div id="photoGallery">
+        <h2>
 
-      <div class="loading">
+            Düğün Fotoğraf Albümü
 
-        Fotoğraflar yükleniyor...
+        </h2>
 
-      </div>
+        <p class="description">
+
+            Bu özel günümüzde çektiğiniz fotoğrafları
+            bizimle paylaşabilirsiniz.
+
+        </p>
+
+        <input
+            type="file"
+            id="fileInput"
+            accept="image/*">
+
+        <button id="uploadBtn">
+
+            Fotoğraf Yükle
+
+        </button>
+
+        <p id="uploadStatus"></p>
+
+    </section>
+
+
+
+    <!-- GALERİ -->
+
+    <section class="gallery-section">
+
+        <h2>
+
+            Anılarımız
+
+        </h2>
+
+        <div class="gallery-divider"></div>
+
+        <div id="photoGallery">
+
+            <div class="loading">
+
+                Fotoğraflar yükleniyor...
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- LIGHTBOX -->
+
+    <div id="lightbox">
+
+        <span id="closeLightbox">
+
+            &times;
+
+        </span>
+
+        <img
+            id="lightboxImage"
+            src=""
+            alt="Fotoğraf">
 
     </div>
 
-  </section>
 
 
-  <!-- =========================
-       LIGHTBOX
-  ========================== -->
-
-  <div id="lightbox">
-
-    <span id="closeLightbox">
-
-      &times;
-
-    </span>
-
-    <img
-      id="lightboxImage"
-      src=""
-      alt="Fotoğraf">
-
-  </div>
-
-
-  <!-- =========================
-       SCRIPT
-  ========================== -->
-
-  <script
-    type="module"
-    src="script.js">
-  </script>
+    <script
+        type="module"
+        src="script.js">
+    </script>
 
 </body>
 
