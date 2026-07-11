@@ -558,3 +558,21 @@ img{
 /* ===========================================
    BİTİŞ
 =========================================== */
+.hero-divider{
+
+    width:120px;
+
+    height:2px;
+
+    margin:28px auto 0;
+
+    border-radius:999px;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        #D6B77A,
+        transparent
+    );
+
+}
