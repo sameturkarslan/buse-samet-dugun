@@ -448,16 +448,6 @@ body::after{
 
 }
 
-
-#fileInput:hover{
-
-    border-color:var(--gold);
-
-    background:#FFFDFB;
-
-}
-
-
 /*==============================
  UPLOAD BUTTON
 ==============================*/
