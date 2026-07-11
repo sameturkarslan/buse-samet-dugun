@@ -8,207 +8,280 @@ import {
   serverTimestamp
 } from "./firebase.js";
 
-// ==============================
-// Cloudinary Ayarları
-// ==============================
+/* ===========================================
+   CLOUDINARY
+=========================================== */
 
 const CLOUD_NAME = "p0wgo1yp";
 const UPLOAD_PRESET = "buse_samet";
 
-// ==============================
-// HTML Elemanları
-// ==============================
+/* ===========================================
+   HTML
+=========================================== */
 
 const fileInput = document.getElementById("fileInput");
 const uploadBtn = document.getElementById("uploadBtn");
 const uploadStatus = document.getElementById("uploadStatus");
 const photoGallery = document.getElementById("photoGallery");
 
-// ==============================
-// Fotoğraf Seç
-// ==============================
+const lightbox = document.getElementById("lightbox");
+const lightboxImage = document.getElementById("lightboxImage");
+const closeLightbox = document.getElementById("closeLightbox");
+
+/* ===========================================
+   DEĞİŞKENLER
+=========================================== */
+
+let galleryImages = [];
+let currentIndex = 0;
+
+let startX = 0;
+let endX = 0;
+
+/* ===========================================
+   FOTOĞRAF YÜKLE
+=========================================== */
 
 uploadBtn.addEventListener("click", () => {
-  fileInput.click();
+
+    fileInput.click();
+
 });
 
 fileInput.addEventListener("change", async () => {
 
-  const file = fileInput.files[0];
+    const file = fileInput.files[0];
 
-  if (!file) return;
+    if (!file) return;
 
-  uploadStatus.textContent = "Fotoğraf yükleniyor...";
-  uploadBtn.disabled = true;
+    uploadStatus.textContent = "Fotoğraf yükleniyor...";
 
-  try {
+    uploadBtn.disabled = true;
 
-    const formData = new FormData();
+    try {
 
-    formData.append("file", file);
-    formData.append("upload_preset", UPLOAD_PRESET);
+        const formData = new FormData();
 
-    const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-      {
-        method: "POST",
-        body: formData
-      }
-    );
+        formData.append("file", file);
 
-    const data = await response.json();
+        formData.append("upload_preset", UPLOAD_PRESET);
 
-    console.log(data);
-    alert(JSON.stringify(data));
+        const response = await fetch(
 
-    if (!data.secure_url) {
-      throw new Error("Cloudinary yükleme hatası.");
+            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+
+            {
+
+                method: "POST",
+
+                body: formData
+
+            }
+
+        );
+
+        const data = await response.json();
+
+        if (!data.secure_url) {
+
+            throw new Error("Cloudinary yükleme hatası");
+
+        }
+
+        await addDoc(
+
+            collection(db, "photos"),
+
+            {
+
+                imageUrl: data.secure_url,
+
+                publicId: data.public_id,
+
+                createdAt: serverTimestamp()
+
+            }
+
+        );
+
+        uploadStatus.textContent = "✅ Fotoğraf başarıyla yüklendi.";
+
     }
 
-    await addDoc(collection(db, "photos"), {
-      imageUrl: data.secure_url,
-      publicId: data.public_id,
-      createdAt: serverTimestamp()
-    });
+    catch (err) {
 
-    uploadStatus.textContent = "✅ Fotoğraf başarıyla yüklendi.";
+        uploadStatus.textContent = "❌ Yükleme başarısız.";
 
-  } catch (err) {
+        console.error(err);
 
-    console.error(err);
-    console.error(err.message);
+    }
 
-    uploadStatus.textContent = "❌ " + (err.message || "Yükleme başarısız.");
+    uploadBtn.disabled = false;
 
-  }
-
-  uploadBtn.disabled = false;
-  fileInput.value = "";
+    fileInput.value = "";
 
 });
 
-// ==============================
-// Canlı Galeri
-// ==============================
+/* ===========================================
+   GALERİ
+=========================================== */
 
 const photoQuery = query(
-  collection(db, "photos"),
-  orderBy("createdAt", "desc")
+
+    collection(db, "photos"),
+
+    orderBy("createdAt", "desc")
+
 );
-let galleryImages = [];
-let currentIndex = 0;
+
 onSnapshot(photoQuery, (snapshot) => {
 
-  photoGallery.innerHTML = "";
+    photoGallery.innerHTML = "";
 
-  if (snapshot.empty) {
+    galleryImages = [];
 
-    photoGallery.innerHTML =
-      "<div class='loading'>Henüz fotoğraf yüklenmedi.</div>";
+    if (snapshot.empty) {
 
-    return;
-  }
+        photoGallery.innerHTML =
+        "<div class='loading'>Henüz fotoğraf yüklenmedi.</div>";
 
-  galleryImages = [];
+        return;
 
-snapshot.forEach((doc) => {
+    }
 
-  const photo = doc.data();
+    snapshot.forEach((doc, index) => {
 
-  galleryImages.push(photo.imageUrl);
+        const photo = doc.data();
 
-  const img = document.createElement("img");
+        galleryImages.push(photo.imageUrl);
 
-  img.src = photo.imageUrl;
-  img.loading = "lazy";
-  img.className = "gallery-image";
+        const img = document.createElement("img");
 
-  photoGallery.appendChild(img);
+        img.src = photo.imageUrl;
 
-});
+        img.loading = "lazy";
 
-  function addGalleryEvents() {
+        img.className = "gallery-image";
 
-  const images = document.querySelectorAll(".gallery-image");
+        img.dataset.index = index;
 
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImage = document.getElementById("lightboxImage");
-  const closeLightbox = document.getElementById("closeLightbox");
-
-  let startX = 0;
-  let endX = 0;
-
-
-  images.forEach((img, index) => {
-
-    img.addEventListener("click", () => {
-
-      currentIndex = index;
-
-      lightboxImage.src = galleryImages[currentIndex];
-
-      lightbox.style.display = "flex";
+        photoGallery.appendChild(img);
 
     });
 
-  });
+    addGalleryEvents();
 
+});
+/* ===========================================
+   LIGHTBOX
+=========================================== */
 
-  closeLightbox.onclick = () => {
+function showImage(index){
+
+    currentIndex = index;
+
+    if(currentIndex < 0){
+
+        currentIndex = galleryImages.length - 1;
+
+    }
+
+    if(currentIndex >= galleryImages.length){
+
+        currentIndex = 0;
+
+    }
+
+    lightboxImage.src = galleryImages[currentIndex];
+
+    lightbox.style.display = "flex";
+
+}
+
+function addGalleryEvents(){
+
+    const images = document.querySelectorAll(".gallery-image");
+
+    images.forEach((img,index)=>{
+
+        img.addEventListener("click",()=>{
+
+            showImage(index);
+
+        });
+
+    });
+
+}
+
+closeLightbox.addEventListener("click",()=>{
 
     lightbox.style.display = "none";
 
-  };
+});
 
+lightbox.addEventListener("click",(e)=>{
 
-  lightboxImage.addEventListener("touchstart", (e) => {
+    if(e.target===lightbox){
 
-    startX = e.changedTouches[0].screenX;
-
-  });
-
-
-  lightboxImage.addEventListener("touchend", (e) => {
-
-    endX = e.changedTouches[0].screenX;
-
-
-    if (startX - endX > 50) {
-
-      currentIndex++;
-
-      if (currentIndex >= galleryImages.length) {
-        currentIndex = 0;
-      }
-
-      lightboxImage.src = galleryImages[currentIndex];
+        lightbox.style.display="none";
 
     }
 
+});
 
-    if (endX - startX > 50) {
+/* ===========================================
+   SAĞA SOLA KAYDIRMA
+=========================================== */
 
-      currentIndex--;
+lightbox.addEventListener("touchstart",(e)=>{
 
-      if (currentIndex < 0) {
-        currentIndex = galleryImages.length - 1;
-      }
+    startX = e.changedTouches[0].clientX;
 
-      lightboxImage.src = galleryImages[currentIndex];
+});
 
-    }
+lightbox.addEventListener("touchend",(e)=>{
 
-  });
+    endX = e.changedTouches[0].clientX;
 
+    if(startX-endX>50){
 
-  lightbox.onclick = (e) => {
-
-    if (e.target === lightbox) {
-
-      lightbox.style.display = "none";
+        showImage(currentIndex+1);
 
     }
 
-  };
+    if(endX-startX>50){
 
-}
+        showImage(currentIndex-1);
+
+    }
+
+});
+
+/* ===========================================
+   KLAVYE DESTEĞİ
+=========================================== */
+
+document.addEventListener("keydown",(e)=>{
+
+    if(lightbox.style.display!=="flex") return;
+
+    if(e.key==="ArrowRight"){
+
+        showImage(currentIndex+1);
+
+    }
+
+    if(e.key==="ArrowLeft"){
+
+        showImage(currentIndex-1);
+
+    }
+
+    if(e.key==="Escape"){
+
+        lightbox.style.display="none";
+
+    }
+
+});
