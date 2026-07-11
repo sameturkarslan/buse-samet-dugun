@@ -64,6 +64,8 @@ fileInput.addEventListener("change", async () => {
         }
 
         await addDoc(collection(db, "photos"), {
+          console.log(data);
+alert(JSON.stringify(data));
 
             imageUrl: data.secure_url,
             publicId: data.public_id,
