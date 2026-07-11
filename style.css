@@ -4,33 +4,55 @@
   BÖLÜM 1
 ==================================================*/
 
+
+/*==============================
+ GOOGLE FONT
+==============================*/
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
+
+/*==============================
+ ROOT
+==============================*/
+
 :root{
 
-    --bg:#FAF8F5;
-    --white:#ffffff;
+    --bg:#F7F3EE;
+
+    --card:#FFFCF8;
 
     --gold:#D6B77A;
-    --gold-dark:#B9935B;
-    --gold-light:#F1E6CF;
 
-    --text:#4A433E;
-    --text-soft:#857C73;
+    --gold-dark:#B89256;
 
-    --shadow:0 20px 45px rgba(0,0,0,.08);
+    --text:#3F352D;
 
-    --radius:26px;
+    --text-soft:#7E7168;
 
-    --transition:.35s ease;
+    --line:#E8DDD0;
+
+    --shadow:0 18px 45px rgba(0,0,0,.08);
+
+    --radius:30px;
 
 }
+
+
+/*==============================
+ RESET
+==============================*/
 
 *{
 
     margin:0;
+
     padding:0;
+
     box-sizing:border-box;
 
 }
+
 
 html{
 
@@ -38,18 +60,73 @@ html{
 
 }
 
+
 body{
 
     background:
-    radial-gradient(circle at top,#ffffff 0%,#FAF8F5 65%);
+        radial-gradient(circle at top,#FFFDF9 0%,var(--bg) 65%);
+
+    font-family:'Montserrat',sans-serif;
 
     color:var(--text);
 
-    font-family:"Montserrat",sans-serif;
-
     overflow-x:hidden;
 
-    line-height:1.7;
+    min-height:100vh;
+
+}
+
+
+/*==============================
+ BACKGROUND DECOR
+==============================*/
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    pointer-events:none;
+
+    opacity:.05;
+
+    background-image:
+
+    radial-gradient(var(--gold) 1px,transparent 1px);
+
+    background-size:34px 34px;
+
+    z-index:-2;
+
+}
+
+
+body::after{
+
+    content:"";
+
+    position:fixed;
+
+    top:-180px;
+
+    right:-180px;
+
+    width:520px;
+
+    height:520px;
+
+    border-radius:50%;
+
+    background:rgba(214,183,122,.08);
+
+    filter:blur(70px);
+
+    z-index:-1;
+
+    pointer-events:none;
 
 }
 
@@ -60,18 +137,32 @@ body{
 
 .hero{
 
-    position:relative;
+    width:min(92%,980px);
+
+    margin:45px auto 70px;
+
+    background:rgba(255,255,255,.75);
+
+    backdrop-filter:blur(18px);
+
+    -webkit-backdrop-filter:blur(18px);
+
+    border:1px solid rgba(214,183,122,.25);
+
+    border-radius:36px;
+
+    box-shadow:var(--shadow);
+
+    padding:90px 50px;
 
     text-align:center;
 
-    padding:95px 20px 85px;
+    position:relative;
 
     overflow:hidden;
 
 }
 
-
-/* Yaprak efekti */
 
 .hero::before{
 
@@ -81,13 +172,17 @@ body{
 
     inset:0;
 
-    opacity:.08;
-
     background:
-    radial-gradient(circle at 15% 20%,#D6B77A 0%,transparent 28%),
-    radial-gradient(circle at 90% 10%,#D6B77A 0%,transparent 22%),
-    radial-gradient(circle at 85% 85%,#D6B77A 0%,transparent 26%),
-    radial-gradient(circle at 10% 90%,#D6B77A 0%,transparent 24%);
+
+    linear-gradient(
+
+        135deg,
+
+        rgba(214,183,122,.06),
+
+        transparent 45%
+
+    );
 
     pointer-events:none;
 
@@ -96,73 +191,63 @@ body{
 
 .welcome{
 
-    position:relative;
-
     font-size:15px;
+
+    letter-spacing:2px;
 
     color:var(--text-soft);
 
-    letter-spacing:1.8px;
+    margin-bottom:28px;
 
     text-transform:uppercase;
-
-    margin-bottom:36px;
 
 }
 
 
 .hero h1{
 
-    position:relative;
+    font-family:'Cinzel',serif;
 
-    font-family:"Cinzel",serif;
-
-    font-size:66px;
+    font-size:72px;
 
     font-weight:600;
 
-    color:var(--gold-dark);
-
     letter-spacing:6px;
 
-    line-height:1.05;
+    color:var(--text);
+
+    line-height:1.15;
 
 }
 
 
 .ampersand{
 
-    position:relative;
-
-    font-family:"Cinzel",serif;
+    font-family:'Cinzel',serif;
 
     font-size:48px;
 
     color:var(--gold);
 
-    margin:16px 0;
+    margin:14px 0;
 
 }
 
 
 .date{
 
-    position:relative;
+    margin-top:28px;
 
-    margin-top:38px;
+    font-size:16px;
 
-    font-size:18px;
-
-    color:var(--text-soft);
-
-    letter-spacing:3px;
+    letter-spacing:4px;
 
     text-transform:uppercase;
 
+    color:var(--text-soft);
+
 }
 
-
-/* Altın çizgi */
 
 .hero-divider{
 
@@ -170,11 +255,13 @@ body{
 
     height:2px;
 
-    margin:34px auto 0;
+    margin:32px auto 0;
 
     border-radius:999px;
 
-    background:linear-gradient(
+    background:
+
+    linear-gradient(
 
         90deg,
 
@@ -191,212 +278,27 @@ body{
   BUSE & SAMET
   PREMIUM WEDDING THEME
   BÖLÜM 2
+  UPLOAD SECTION
 ==================================================*/
 
 
-/* HERO KARTI */
-
-.hero{
-
-    max-width:920px;
-
-    margin:50px auto 70px;
-
-    background:rgba(255,255,255,.72);
-
-    backdrop-filter:blur(14px);
-
-    -webkit-backdrop-filter:blur(14px);
-
-    border:1px solid rgba(214,183,122,.35);
-
-    border-radius:34px;
-
-    box-shadow:
-        0 30px 70px rgba(0,0,0,.08),
-        inset 0 0 0 1px rgba(255,255,255,.45);
-
-}
-
-
-/* ÜST ALTIN ÇİZGİ */
-
-.hero::after{
-
-    content:"";
-
-    position:absolute;
-
-    left:50%;
-
-    top:22px;
-
-    transform:translateX(-50%);
-
-    width:90px;
-
-    height:3px;
-
-    border-radius:999px;
-
-    background:linear-gradient(
-        90deg,
-        transparent,
-        var(--gold),
-        transparent
-    );
-
-}
-
-
-/* İSİMLER */
-
-.hero h1{
-
-    text-shadow:
-
-        0 2px 12px rgba(185,147,91,.18);
-
-}
-
-
-/* & */
-
-.ampersand{
-
-    text-shadow:
-
-        0 0 18px rgba(214,183,122,.35);
-
-}
-
-
-/* TARİH */
-
-.date{
-
-    position:relative;
-
-    display:inline-block;
-
-    padding:0 18px;
-
-}
-
-
-/* TARİHİN YAN ÇİZGİLERİ */
-
-.date::before,
-
-.date::after{
-
-    content:"";
-
-    position:absolute;
-
-    top:50%;
-
-    width:34px;
-
-    height:1px;
-
-    background:rgba(214,183,122,.7);
-
-}
-
-.date::before{
-
-    left:-26px;
-
-}
-
-.date::after{
-
-    right:-26px;
-
-}
-
-
-/* ALT ÇİZGİ */
-
-.hero-divider{
-
-    width:170px;
-
-    height:2px;
-
-    margin-top:34px;
-
-    opacity:.9;
-
-}
-
-
-/* HERO HOVER */
-
-.hero:hover{
-
-    transform:translateY(-2px);
-
-    transition:.45s;
-
-    box-shadow:
-
-        0 35px 85px rgba(0,0,0,.10),
-
-        inset 0 0 0 1px rgba(255,255,255,.55);
-
-}
-
-
-/* YUMUŞAK PARLAMA */
-
-.hero::before{
-
-    animation:heroGlow 8s ease-in-out infinite;
-
-}
-
-
-@keyframes heroGlow{
-
-    0%{
-
-        opacity:.05;
-
-    }
-
-    50%{
-
-        opacity:.12;
-
-    }
-
-    100%{
-
-        opacity:.05;
-
-    }
-	/*==================================================
-  BUSE & SAMET
-  PREMIUM WEDDING THEME
-  BÖLÜM 3
-  FOTOĞRAF YÜKLEME
-==================================================*/
+/*==============================
+ UPLOAD SECTION
+==============================*/
 
 .upload-section{
 
-    width:min(92%,860px);
+    width:min(92%,760px);
 
     margin:0 auto 90px;
 
-    background:rgba(255,255,255,.78);
+    background:rgba(255,255,255,.82);
 
-    backdrop-filter:blur(14px);
+    backdrop-filter:blur(18px);
 
-    -webkit-backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(18px);
 
-    border:1px solid rgba(214,183,122,.28);
+    border:1px solid rgba(214,183,122,.25);
 
     border-radius:32px;
 
@@ -404,8 +306,7 @@ body{
 
     text-align:center;
 
-    box-shadow:
-        0 25px 70px rgba(0,0,0,.07);
+    box-shadow:var(--shadow);
 
     position:relative;
 
@@ -420,59 +321,34 @@ body{
 
     position:absolute;
 
-    width:320px;
+    inset:0;
 
-    height:320px;
+    background:
 
-    border-radius:50%;
+    linear-gradient(
 
-    background:radial-gradient(
-        rgba(214,183,122,.18),
-        transparent 70%
+        135deg,
+
+        rgba(214,183,122,.06),
+
+        transparent 55%
+
     );
 
-    top:-170px;
-
-    right:-120px;
-
-}
-
-
-.upload-section::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:260px;
-
-    height:260px;
-
-    border-radius:50%;
-
-    background:radial-gradient(
-        rgba(214,183,122,.12),
-        transparent 70%
-    );
-
-    left:-100px;
-
-    bottom:-140px;
+    pointer-events:none;
 
 }
 
 
 .upload-section h2{
 
-    position:relative;
-
     font-family:"Cinzel",serif;
 
-    font-size:34px;
+    font-size:36px;
 
     font-weight:600;
 
-    color:var(--gold-dark);
+    color:var(--text);
 
     letter-spacing:2px;
 
@@ -481,46 +357,24 @@ body{
 }
 
 
-.upload-section h2::after{
-
-    content:"";
-
-    display:block;
-
-    width:90px;
-
-    height:2px;
-
-    margin:20px auto 0;
-
-    border-radius:999px;
-
-    background:linear-gradient(
-        90deg,
-        transparent,
-        var(--gold),
-        transparent
-    );
-
-}
-
-
 .description{
-
-    position:relative;
 
     max-width:520px;
 
-    margin:0 auto 35px;
-
-    font-size:16px;
+    margin:0 auto 36px;
 
     color:var(--text-soft);
+
+    font-size:16px;
 
     line-height:1.9;
 
 }
 
+
+/*==============================
+ FILE INPUT
+==============================*/
 
 #fileInput{
 
@@ -528,23 +382,25 @@ body{
 
     width:100%;
 
-    max-width:420px;
-
     margin:0 auto 28px;
 
     padding:18px;
 
     border:2px dashed rgba(214,183,122,.45);
 
-    border-radius:18px;
+    border-radius:20px;
 
-    background:#fffdfa;
+    background:#FCFAF7;
 
     color:var(--text-soft);
 
+    font-family:"Montserrat",sans-serif;
+
+    font-size:15px;
+
     cursor:pointer;
 
-    transition:.35s;
+    transition:.30s;
 
 }
 
@@ -553,10 +409,46 @@ body{
 
     border-color:var(--gold);
 
-    background:#ffffff;
+    background:#FFFDFB;
 
 }
 
+
+#fileInput::file-selector-button{
+
+    border:none;
+
+    background:var(--gold);
+
+    color:#fff;
+
+    padding:12px 20px;
+
+    border-radius:999px;
+
+    margin-right:18px;
+
+    font-family:"Montserrat",sans-serif;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.30s;
+
+}
+
+
+#fileInput::file-selector-button:hover{
+
+    background:var(--gold-dark);
+
+}
+
+
+/*==============================
+ UPLOAD BUTTON
+==============================*/
 
 #uploadBtn{
 
@@ -568,38 +460,37 @@ body{
 
     gap:10px;
 
-    min-width:230px;
+    min-width:240px;
 
-    height:58px;
-
-    padding:0 34px;
+    padding:17px 34px;
 
     border:none;
 
     border-radius:999px;
 
-    cursor:pointer;
-
     background:linear-gradient(
         135deg,
-        #D6B77A,
-        #B9935B
+        var(--gold),
+        var(--gold-dark)
     );
 
-    color:#ffffff;
+    color:#fff;
 
     font-family:"Montserrat",sans-serif;
 
-    font-size:15px;
+    font-size:16px;
 
     font-weight:600;
 
-    letter-spacing:.6px;
+    letter-spacing:.4px;
+
+    cursor:pointer;
 
     box-shadow:
-        0 14px 35px rgba(185,147,91,.28);
 
-    transition:all .35s ease;
+        0 14px 35px rgba(184,146,86,.28);
+
+    transition:.30s;
 
 }
 
@@ -609,7 +500,8 @@ body{
     transform:translateY(-3px);
 
     box-shadow:
-        0 20px 45px rgba(185,147,91,.34);
+
+        0 20px 42px rgba(184,146,86,.35);
 
 }
 
@@ -621,37 +513,55 @@ body{
 }
 
 
+#uploadBtn:disabled{
+
+    opacity:.65;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+}
+
+
+/*==============================
+ STATUS
+==============================*/
+
 #uploadStatus{
 
-    margin-top:24px;
+    margin-top:22px;
 
-    min-height:26px;
+    min-height:24px;
 
     font-size:15px;
 
     font-weight:500;
 
-    color:var(--gold-dark);
+    color:var(--text-soft);
 
-}
+    line-height:1.7;
 
 }
 /*==================================================
   BUSE & SAMET
   PREMIUM WEDDING THEME
-  BÖLÜM 4
-  GALERİ
+  BÖLÜM 3
+  GALLERY • LIGHTBOX • FOOTER • RESPONSIVE
 ==================================================*/
+
+
+/*==============================
+ GALLERY
+==============================*/
 
 .gallery-section{
 
-    width:min(94%,1200px);
+    width:min(92%,1200px);
 
-    margin:90px auto;
+    margin:0 auto 100px;
 
     text-align:center;
-
-    position:relative;
 
 }
 
@@ -660,38 +570,45 @@ body{
 
     font-family:"Cinzel",serif;
 
-    font-size:34px;
+    font-size:42px;
 
     font-weight:600;
 
-    color:var(--gold-dark);
-
     letter-spacing:2px;
 
-    margin-bottom:18px;
+    color:var(--text);
 
 }
 
 
 .gallery-divider{
 
-    width:150px;
+    width:170px;
 
     height:2px;
 
-    margin:0 auto 55px;
+    margin:24px auto 55px;
 
     border-radius:999px;
 
     background:linear-gradient(
+
         90deg,
+
         transparent,
+
         var(--gold),
+
         transparent
+
     );
 
 }
 
+
+/*==============================
+ PHOTO GRID
+==============================*/
 
 #photoGallery{
 
@@ -699,86 +616,18 @@ body{
 
     grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 
-    gap:28px;
+    gap:26px;
 
     align-items:start;
 
 }
 
 
-#photoGallery img{
-
-    width:100%;
-
-    display:block;
-
-    border-radius:24px;
-
-    object-fit:cover;
-
-    aspect-ratio:4/5;
-
-    cursor:pointer;
-
-    background:#ffffff;
-
-    border:1px solid rgba(214,183,122,.18);
-
-    box-shadow:
-        0 18px 40px rgba(0,0,0,.08);
-
-    transition:
-        transform .35s ease,
-        box-shadow .35s ease,
-        border-color .35s ease;
-
-}
-
-
-#photoGallery img:hover{
-
-    transform:translateY(-8px);
-
-    border-color:rgba(214,183,122,.55);
-
-    box-shadow:
-        0 28px 60px rgba(0,0,0,.14);
-
-}
-
-
 .loading{
 
-    width:100%;
-
     grid-column:1/-1;
 
-    padding:60px 20px;
-
-    text-align:center;
-
-    color:var(--text-soft);
-
-    font-size:17px;
-
-    letter-spacing:.4px;
-
-}
-
-
-.empty-gallery{
-
-    width:100%;
-
-    grid-column:1/-1;
-
-    padding:70px 30px;
-
-    border:2px dashed rgba(214,183,122,.30);
-
-    border-radius:26px;
-
-    background:rgba(255,255,255,.70);
+    padding:50px;
 
     color:var(--text-soft);
 
@@ -787,69 +636,46 @@ body{
 }
 
 
-#photoGallery img{
+.gallery-image{
 
-    animation:fadeGallery .7s ease;
+    width:100%;
 
-}
+    aspect-ratio:1/1;
 
+    object-fit:cover;
 
-@keyframes fadeGallery{
+    border-radius:24px;
 
-    from{
+    cursor:pointer;
 
-        opacity:0;
+    background:#ffffff;
 
-        transform:translateY(25px);
+    border:1px solid rgba(214,183,122,.18);
 
-    }
+    box-shadow:var(--shadow);
 
-    to{
+    transition:
 
-        opacity:1;
+        transform .35s ease,
 
-        transform:translateY(0);
+        box-shadow .35s ease,
 
-    }
-
-}
-
-
-@media(max-width:768px){
-
-    .gallery-section{
-
-        margin:70px auto;
-
-    }
-
-    .gallery-section h2{
-
-        font-size:28px;
-
-    }
-
-    #photoGallery{
-
-        grid-template-columns:1fr;
-
-        gap:22px;
-
-    }
-
-    #photoGallery img{
-
-        border-radius:20px;
-
-    }
+        filter .35s ease;
 
 }
-/*==================================================
-  BUSE & SAMET
-  PREMIUM WEDDING THEME
-  BÖLÜM 5
-  LIGHTBOX • FOOTER • RESPONSIVE
-==================================================*/
+
+
+.gallery-image:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+
+        0 24px 45px rgba(0,0,0,.14);
+
+    filter:brightness(1.02);
+
+}
 
 
 /*==============================
@@ -862,41 +688,26 @@ body{
 
     inset:0;
 
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
     background:rgba(18,18,18,.92);
 
     backdrop-filter:blur(12px);
 
     -webkit-backdrop-filter:blur(12px);
 
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    opacity:0;
-
-    visibility:hidden;
-
-    transition:.35s;
-
     z-index:9999;
 
-    padding:35px;
+    padding:25px;
 
 }
 
 
-#lightbox.active{
-
-    opacity:1;
-
-    visibility:visible;
-
-}
-
-
-#lightbox img{
+#lightboxImage{
 
     max-width:92vw;
 
@@ -904,11 +715,11 @@ body{
 
     border-radius:24px;
 
-    border:4px solid rgba(255,255,255,.95);
+    border:4px solid #ffffff;
 
     box-shadow:
 
-        0 35px 90px rgba(0,0,0,.45);
+        0 35px 80px rgba(0,0,0,.45);
 
     animation:zoomIn .35s ease;
 
@@ -921,7 +732,7 @@ body{
 
         opacity:0;
 
-        transform:scale(.92);
+        transform:scale(.94);
 
     }
 
@@ -944,25 +755,24 @@ body{
 
     right:34px;
 
-    font-size:46px;
+    font-size:48px;
 
     color:#ffffff;
 
     cursor:pointer;
 
-    transition:.3s;
+    transition:.30s;
 
 }
 
 
 #closeLightbox:hover{
 
-    transform:rotate(90deg);
-
     color:var(--gold);
 
-}
+    transform:rotate(90deg);
 
+}
 
 
 /*==============================
@@ -973,7 +783,7 @@ body{
 
     width:min(92%,900px);
 
-    margin:100px auto 60px;
+    margin:80px auto 60px;
 
     text-align:center;
 
@@ -986,7 +796,7 @@ body{
 
     height:2px;
 
-    margin:0 auto 28px;
+    margin:0 auto 30px;
 
     border-radius:999px;
 
@@ -1009,14 +819,13 @@ body{
 
     color:var(--text-soft);
 
+    line-height:1.9;
+
     font-size:15px;
 
-    letter-spacing:.5px;
-
-    line-height:1.8;
+    margin-bottom:8px;
 
 }
-
 
 
 /*==============================
@@ -1029,11 +838,13 @@ body{
 
 }
 
+
 ::-webkit-scrollbar-track{
 
-    background:#f5f2ed;
+    background:#F3EFE9;
 
 }
+
 
 ::-webkit-scrollbar-thumb{
 
@@ -1050,9 +861,8 @@ body{
 }
 
 
-
 /*==============================
- SELECTION
+ TEXT SELECTION
 ==============================*/
 
 ::selection{
@@ -1060,7 +870,6 @@ body{
     background:rgba(214,183,122,.35);
 
 }
-
 
 
 /*==============================
@@ -1071,15 +880,15 @@ body{
 
     .hero{
 
-        margin:25px 16px 50px;
+        padding:70px 28px;
 
-        padding:70px 22px;
+        margin:25px 18px 50px;
 
     }
 
     .hero h1{
 
-        font-size:48px;
+        font-size:52px;
 
         letter-spacing:3px;
 
@@ -1087,21 +896,11 @@ body{
 
     .ampersand{
 
-        font-size:38px;
-
-    }
-
-    .date{
-
-        font-size:15px;
-
-        letter-spacing:2px;
+        font-size:40px;
 
     }
 
     .upload-section{
-
-        width:92%;
 
         padding:45px 28px;
 
@@ -1112,6 +911,12 @@ body{
 
 @media(max-width:600px){
 
+    .hero h1{
+
+        font-size:40px;
+
+    }
+
     .welcome{
 
         font-size:13px;
@@ -1120,17 +925,11 @@ body{
 
     }
 
-    .hero h1{
-
-        font-size:38px;
-
-    }
-
     .gallery-section h2,
 
     .upload-section h2{
 
-        font-size:28px;
+        font-size:30px;
 
     }
 
@@ -1140,9 +939,9 @@ body{
 
     }
 
-    #fileInput{
+    #photoGallery{
 
-        font-size:14px;
+        grid-template-columns:1fr;
 
     }
 
