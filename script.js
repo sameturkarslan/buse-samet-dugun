@@ -12,7 +12,7 @@ import {
 // Cloudinary Ayarları
 // ==============================
 
-const CLOUD_NAME = "buse_samet";
+const CLOUD_NAME = "p0wgo1yp";
 const UPLOAD_PRESET = "buse_samet";
 
 // ==============================
