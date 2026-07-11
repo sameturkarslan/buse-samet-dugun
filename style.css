@@ -576,3 +576,21 @@ img{
     );
 
 }
+.camera-icon{
+
+    width:20px;
+    height:20px;
+
+    fill:none;
+
+    stroke:#ffffff;
+
+    stroke-width:1.8;
+
+    stroke-linecap:round;
+
+    stroke-linejoin:round;
+
+    margin-right:8px;
+
+}
