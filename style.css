@@ -72,9 +72,19 @@ body{
 
 .ampersand{
 
-    font-size:34px;
+    font-family:"Cormorant Garamond", serif;
 
-    margin:8px 0;
+    font-size:42px;
+
+    font-style:italic;
+
+    font-weight:500;
+
+    color:#C6A96A;
+
+    margin:12px 0;
+
+    line-height:1;
 
 }
 
