@@ -370,77 +370,35 @@ body::after{
     line-height:1.9;
 
 }
-
-
 /*==============================
  FILE INPUT
 ==============================*/
 
-/*==============================
- CUSTOM FILE UPLOAD
-==============================*/
-
-.upload-box{
-
-    margin-bottom:30px;
-
-}
-
-
-.custom-file{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:15px 34px;
-
-    border-radius:999px;
-
-    background:linear-gradient(
-        135deg,
-        var(--gold),
-        var(--gold-dark)
-    );
-
-    color:#fff;
-
-    font-family:"Montserrat",sans-serif;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-    box-shadow:
-
-    0 14px 35px rgba(184,146,86,.28);
-
-    transition:.3s;
-
-}
-
-
-.custom-file:hover{
-
-    transform:translateY(-3px);
-
-}
-
-
-#fileName{
+#fileInput{
 
     display:block;
 
-    margin-top:18px;
+    width:100%;
+
+    margin:0 auto 28px;
+
+    padding:18px;
+
+    border:2px dashed rgba(214,183,122,.45);
+
+    border-radius:20px;
+
+    background:#FCFAF7;
 
     color:var(--text-soft);
 
-    font-size:14px;
+    font-family:"Montserrat",sans-serif;
+
+    font-size:15px;
+
+    cursor:pointer;
 
 }
-
 /*==============================
  UPLOAD BUTTON
 ==============================*/
