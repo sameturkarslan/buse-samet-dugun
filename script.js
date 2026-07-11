@@ -12,8 +12,8 @@ import {
 // Cloudinary Ayarları
 // ==============================
 
-const CLOUD_NAME = "BURAYA_CLOUDINARY_CLOUD_NAME";
-const UPLOAD_PRESET = "BURAYA_UPLOAD_PRESET";
+const CLOUD_NAME = "buse_samet";
+const UPLOAD_PRESET = "buse_samet";
 
 // ==============================
 // HTML Elemanları
