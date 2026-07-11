@@ -1,210 +1,425 @@
-* {
-  box-sizing: border-box;
+/* ===================================================
+   style.css
+   BÖLÜM 1 / 2
+=================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    font-family:Arial,Helvetica,sans-serif;
+
+    background:#ffffff;
+
+    color:#333;
+
+    min-height:100vh;
+
 }
 
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
+/* ===========================================
+   HEADER
+=========================================== */
+
+.hero{
+
+    padding:40px 20px;
+
+    text-align:center;
+
+}
+
+.welcome{
+
+    font-size:16px;
+
+    color:#777;
+
+    margin-bottom:15px;
+
+}
+
+.hero h1{
+
+    font-size:42px;
+
+    font-weight:700;
+
+    line-height:1.2;
+
+}
+
+.ampersand{
+
+    font-size:34px;
+
+    margin:8px 0;
+
+}
+
+.date{
+
+    margin-top:18px;
+
+    color:#777;
+
 }
 
 
-/* ==============================
+/* ===========================================
+   FOTOĞRAF YÜKLEME
+=========================================== */
+
+.upload-section{
+
+    text-align:center;
+
+    padding:25px 20px;
+
+}
+
+.description{
+
+    max-width:650px;
+
+    margin:12px auto 25px;
+
+    color:#666;
+
+    line-height:1.6;
+
+}
+
+#fileInput{
+
+    display:none;
+
+}
+
+#uploadBtn{
+
+    border:none;
+
+    outline:none;
+
+    cursor:pointer;
+
+    padding:13px 24px;
+
+    border-radius:12px;
+
+    font-size:16px;
+
+    transition:.25s;
+
+}
+
+#uploadBtn:hover{
+
+    transform:scale(1.03);
+
+}
+
+#uploadBtn:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+}
+
+#uploadStatus{
+
+    margin-top:15px;
+
+    min-height:24px;
+
+}
+
+
+/* ===========================================
    GALERİ
-============================== */
+=========================================== */
 
+.gallery-section{
 
-#photoGallery {
+    padding:20px;
 
-  display: grid;
+}
 
-  grid-template-columns: repeat(3, 1fr);
+.gallery-section h2{
 
-  gap: 10px;
+    text-align:center;
 
-  padding: 15px;
+    margin-bottom:18px;
+
+}
+
+#photoGallery{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+
+    gap:12px;
+
+}
+
+.gallery-image{
+
+    width:100%;
+
+    aspect-ratio:1/1;
+
+    object-fit:cover;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    user-select:none;
+
+    -webkit-user-select:none;
+
+}
+
+.gallery-image:hover{
+
+    transform:scale(1.02);
+
+}
+
+.loading{
+
+    grid-column:1/-1;
+
+    text-align:center;
+
+    color:#777;
+
+    padding:40px 0;
 
 }
 
 
-.gallery-image {
-
-  width: 100%;
-
-  aspect-ratio: 1 / 1;
-
-  object-fit: cover;
-
-  cursor: pointer;
-
-  border-radius: 8px;
-
-}
-
-
-/* ==============================
+/* ===========================================
    LIGHTBOX
-============================== */
+=========================================== */
 
+#lightbox{
 
-#lightbox {
+    display:none;
 
-  display: none;
+    position:fixed;
 
-  position: fixed;
+    inset:0;
 
-  z-index: 99999;
+    width:100vw;
 
-  top: 0;
+    height:100vh;
 
-  left: 0;
+    background:#ffffff;
 
-  width: 100vw;
+    z-index:99999;
 
-  height: 100vh;
+    justify-content:center;
 
-  background: rgba(0,0,0,0.95);
+    align-items:center;
 
-  justify-content: center;
-
-  align-items: center;
-
-}
-
-
-/* Açılan büyük fotoğraf */
-
-
-#lightboxImage {
-
-  max-width: 90vw;
-
-  max-height: 85vh;
-
-  width: auto;
-
-  height: auto;
-
-  object-fit: contain;
-
-  touch-action: pan-y;
+    overflow:hidden;
 
 }
 
+#lightboxImage{
 
-/* Kapatma işareti */
+    max-width:92vw;
 
+    max-height:88vh;
 
-#closeLightbox {
+    width:auto;
 
-  position: absolute;
+    height:auto;
 
-  top: 20px;
+    object-fit:contain;
 
-  right: 25px;
+    user-select:none;
 
-  color: white;
+    -webkit-user-select:none;
 
-  font-size: 45px;
+    -webkit-touch-callout:none;
 
-  cursor: pointer;
+    touch-action:pan-y;
 
-  z-index: 100000;
-
-}
-
-/* ==============================
-   UPLOAD ALANI
-============================== */
-
-
-#fileInput {
-
-  display: none;
+    transition:opacity .2s;
 
 }
 
+#closeLightbox{
 
-#uploadBtn {
+    position:absolute;
 
-  cursor: pointer;
+    top:18px;
 
-}
+    right:22px;
 
+    font-size:42px;
 
-/* ==============================
-   YÜKLEME DURUMU
-============================== */
+    color:#222;
 
+    cursor:pointer;
 
-#uploadStatus {
-
-  text-align: center;
-
-  margin: 15px;
+    z-index:100000;
 
 }
-
-
-/* ==============================
+/* ===========================================
    MOBİL UYUMLULUK
-============================== */
+=========================================== */
 
+@media (max-width:768px){
 
-@media (max-width: 600px) {
+    .hero{
 
+        padding:30px 15px;
 
-  #photoGallery {
+    }
 
-    grid-template-columns: repeat(2, 1fr);
+    .hero h1{
 
-    gap: 8px;
+        font-size:34px;
 
-    padding: 10px;
+    }
 
-  }
+    .ampersand{
 
+        font-size:28px;
 
-  .gallery-image {
+    }
 
-    border-radius: 6px;
+    .gallery-section{
 
-  }
+        padding:15px;
 
+    }
 
-  #lightboxImage {
+    #photoGallery{
 
-    max-width: 92vw;
+        grid-template-columns:repeat(2,1fr);
 
-    max-height: 82vh;
+        gap:8px;
 
-  }
+    }
 
+    .gallery-image{
 
-  #closeLightbox {
+        border-radius:8px;
 
-    top: 15px;
+    }
 
-    right: 20px;
+    #lightboxImage{
 
-    font-size: 40px;
+        max-width:95vw;
 
-  }
+        max-height:84vh;
+
+    }
+
+    #closeLightbox{
+
+        top:14px;
+
+        right:18px;
+
+        font-size:38px;
+
+    }
 
 }
 
 
-/* ==============================
-   FOTOĞRAF KAYDIRMA HAZIRLIĞI
-============================== */
+@media (max-width:420px){
 
+    #photoGallery{
 
-#lightboxImage {
+        gap:6px;
 
-  user-select: none;
+    }
 
-  -webkit-user-select: none;
+    #uploadBtn{
 
-  -webkit-touch-callout: none;
+        width:100%;
+
+        max-width:300px;
+
+    }
 
 }
+
+
+/* ===========================================
+   ANİMASYONLAR
+=========================================== */
+
+.gallery-image{
+
+    animation:fadeIn .25s ease;
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:scale(.97);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:scale(1);
+
+    }
+
+}
+
+
+/* ===========================================
+   KAYDIRMA İÇİN HAZIRLIK
+=========================================== */
+
+#lightboxImage{
+
+    pointer-events:auto;
+
+}
+
+#lightbox{
+
+    -webkit-overflow-scrolling:touch;
+
+}
+
+img{
+
+    -webkit-user-drag:none;
+
+}
+
+
+/* ===========================================
+   BİTİŞ
+=========================================== */
