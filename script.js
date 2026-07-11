@@ -95,7 +95,8 @@ const photoQuery = query(
   collection(db, "photos"),
   orderBy("createdAt", "desc")
 );
-
+let galleryImages = [];
+let currentIndex = 0;
 onSnapshot(photoQuery, (snapshot) => {
 
   photoGallery.innerHTML = "";
