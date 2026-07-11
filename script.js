@@ -109,23 +109,25 @@ onSnapshot(photoQuery, (snapshot) => {
     return;
   }
 
-  snapshot.forEach((doc) => {
+  galleryImages = [];
 
-    const photo = doc.data();
+snapshot.forEach((doc) => {
 
-    const img = document.createElement("img");
+  const photo = doc.data();
 
-    img.src = photo.imageUrl;
-    img.loading = "lazy";
-    img.className = "gallery-image";
+  galleryImages.push(photo.imageUrl);
 
-    photoGallery.appendChild(img);
+  const img = document.createElement("img");
 
-  });
-  addGalleryEvents();
+  img.src = photo.imageUrl;
+  img.loading = "lazy";
+  img.className = "gallery-image";
+
+  photoGallery.appendChild(img);
+
 });
 
-function addGalleryEvents() {
+  function addGalleryEvents() {
 
   const images = document.querySelectorAll(".gallery-image");
 
@@ -134,11 +136,13 @@ function addGalleryEvents() {
   const closeLightbox = document.getElementById("closeLightbox");
 
 
-  images.forEach(img => {
+  images.forEach((img, index) => {
 
     img.addEventListener("click", () => {
 
-      lightboxImage.src = img.src;
+      currentIndex = index;
+
+      lightboxImage.src = galleryImages[currentIndex];
 
       lightbox.style.display = "flex";
 
@@ -159,6 +163,52 @@ function addGalleryEvents() {
     if (e.target === lightbox) {
 
       lightbox.style.display = "none";
+
+    }
+
+  });
+
+
+  let startX = 0;
+
+
+  lightboxImage.addEventListener("touchstart", (e) => {
+
+    startX = e.touches[0].clientX;
+
+  });
+
+
+  lightboxImage.addEventListener("touchend", (e) => {
+
+    let endX = e.changedTouches[0].clientX;
+
+    if (startX - endX > 50) {
+
+      // sola kaydır → sonraki fotoğraf
+
+      currentIndex++;
+
+      if (currentIndex >= galleryImages.length) {
+        currentIndex = 0;
+      }
+
+      lightboxImage.src = galleryImages[currentIndex];
+
+    }
+
+
+    if (endX - startX > 50) {
+
+      // sağa kaydır → önceki fotoğraf
+
+      currentIndex--;
+
+      if (currentIndex < 0) {
+        currentIndex = galleryImages.length - 1;
+      }
+
+      lightboxImage.src = galleryImages[currentIndex];
 
     }
 
