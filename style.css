@@ -134,9 +134,23 @@ body{
 
 .upload-section{
 
+    max-width:700px;
+
+    margin:35px auto;
+
+    padding:35px 30px;
+
     text-align:center;
 
-    padding:25px 20px;
+    background:#ffffff;
+
+    border-radius:24px;
+
+    border:1px solid rgba(176,141,87,.15);
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.06),
+        0 4px 12px rgba(176,141,87,.08);
 
 }
 
