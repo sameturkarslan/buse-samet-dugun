@@ -1,898 +1,362 @@
 /*==================================================
   BUSE & SAMET
-  PREMIUM WEDDING THEME
-  BÖLÜM 1
+  PREMIUM WEDDING THEME - %100 MOBILE ACCURATE
 ==================================================*/
 
+/*==============================
+ ROOT & RENK PALETİ (Görseldeki Tonlar)
+==============================*/
+:root {
+    --bg-creme: #f7f4eb;       /* Sayfa arka planındaki o yumuşak krem */
+    --card-bg: #fdfbf5;        /* Mobil kartın içindeki daha açık fildişi */
+    --gold-light: #e2cb99;     /* Buton çerçevesindeki ışıltılı sarı */
+    --gold-text: #b59463;      /* Başlıklardaki asil altın sarısı */
+    --gold-dark: #aa864f;      /* Buton metni ve ikonlarındaki bronz altın */
+    --text-dark: #5c4e3c;      /* Okunabilir gövde metni rengi */
+    --text-muted: #9c8e7a;     /* İkincil hafif metin rengi */
+    --shadow-soft: 0 10px 30px rgba(181, 148, 99, 0.08);
+}
 
 /*==============================
- GOOGLE FONT
+ GENEL SIFIRLAMA & AKICILIK
 ==============================*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
-
+body {
+    background-color: var(--bg-creme);
+    background-image: radial-gradient(circle at top, #fffdf9 0%, var(--bg-creme) 100%);
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-dark);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
 
 /*==============================
- ROOT
+ MOBİL ÇERÇEVE (Tasarımın Kalbi)
 ==============================*/
-
-:root{
-
-    --bg:#F7F3EE;
-
-    --card:#FFFCF8;
-
-    --gold:#D6B77A;
-
-    --gold-dark:#B89256;
-
-    --text:#3F352D;
-
-    --text-soft:#7E7168;
-
-    --line:#E8DDD0;
-
-    --shadow:0 18px 45px rgba(0,0,0,.08);
-
-    --radius:30px;
-
+.wedding-container {
+    width: 100%;
+    max-width: 450px; /* Görseldeki dikey mobil hissi korur */
+    background: var(--card-bg);
+    min-height: 100vh;
+    position: relative;
+    padding: 50px 24px 40px;
+    box-shadow: 0 0 40px rgba(92, 78, 60, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+/* Sayfa Kenarlarındaki Hafif Yaprak Esintisi İllüzyonu */
+.wedding-container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.12;
+    background-image: radial-gradient(var(--gold-text) 1px, transparent 1px);
+    background-size: 24px 24px;
+}
 
 /*==============================
- RESET
+ MENÜ BUTONU (Sağ Üst)
 ==============================*/
-
-*{
-
-    margin:0;
-
-    padding:0;
-
-    box-sizing:border-box;
-
+.menu-btn {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    width: 42px;
+    height: 42px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 4px 12px rgba(92, 78, 60, 0.08);
+    cursor: pointer;
+    z-index: 10;
 }
 
-
-html{
-
-    scroll-behavior:smooth;
-
+.menu-btn span {
+    width: 18px;
+    height: 2px;
+    background: var(--gold-light);
+    border-radius: 2px;
 }
-
-
-body{
-
-    background:
-        radial-gradient(circle at top,#FFFDF9 0%,var(--bg) 65%);
-
-    font-family:'Montserrat',sans-serif;
-
-    color:var(--text);
-
-    overflow-x:hidden;
-
-    min-height:100vh;
-
-}
-
 
 /*==============================
- BACKGROUND DECOR
+ HERO / BAŞLIK ALANI
 ==============================*/
-
-body::before{
-
-    content:"";
-
-    position:fixed;
-
-    inset:0;
-
-    pointer-events:none;
-
-    opacity:.05;
-
-    background-image:
-
-    radial-gradient(var(--gold) 1px,transparent 1px);
-
-    background-size:34px 34px;
-
-    z-index:-2;
-
+.hero {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 35px;
+    z-index: 2;
 }
 
-
-body::after{
-
-    content:"";
-
-    position:fixed;
-
-    top:-180px;
-
-    right:-180px;
-
-    width:520px;
-
-    height:520px;
-
-    border-radius:50%;
-
-    background:rgba(214,183,122,.08);
-
-    filter:blur(70px);
-
-    z-index:-1;
-
-    pointer-events:none;
-
+.heart-divider {
+    color: var(--gold-text);
+    font-size: 13px;
+    margin: 10px 0;
+    letter-spacing: 2px;
+    opacity: 0.8;
 }
 
+.names {
+    font-family: 'Cormorant Garish', serif;
+    font-size: 44px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    line-height: 1.1;
+    color: var(--gold-text);
+    text-transform: uppercase;
+}
+
+.names span {
+    display: block;
+    font-size: 30px;
+    margin: 4px 0;
+    font-family: 'Cormorant Garish', serif;
+}
+
+.date-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 18px 0;
+}
+
+.date-section .line {
+    width: 40px;
+    height: 1px;
+    background: var(--gold-light);
+}
+
+.date-section .date {
+    font-size: 13px;
+    letter-spacing: 3px;
+    font-weight: 500;
+    color: var(--gold-text);
+}
+
+.welcome-text {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-dark);
+    max-width: 290px;
+    margin: 0 auto;
+    font-weight: 300;
+}
 
 /*==============================
- HERO
+ PREMIUM UPLOAD BUTTON (Fotoğraf Yükleme)
 ==============================*/
-
-.hero{
-
-    width:min(92%,980px);
-
-    margin:45px auto 70px;
-
-    background:rgba(255,255,255,.75);
-
-    backdrop-filter:blur(18px);
-
-    -webkit-backdrop-filter:blur(18px);
-
-    border:1px solid rgba(214,183,122,.25);
-
-    border-radius:36px;
-
-    box-shadow:var(--shadow);
-
-    padding:90px 50px;
-
-    text-align:center;
-
-    position:relative;
-
-    overflow:hidden;
-
+.upload-section {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 45px;
+    z-index: 2;
 }
 
-
-.hero::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background:
-
-    linear-gradient(
-
-        135deg,
-
-        rgba(214,183,122,.06),
-
-        transparent 45%
-
-    );
-
-    pointer-events:none;
-
+.premium-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 290px;
+    padding: 16px 28px;
+    background: #ffffff;
+    border: 2px solid var(--gold-light);
+    border-radius: 30px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: var(--gold-dark);
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(226, 203, 153, 0.25);
+    transition: all 0.3s ease;
+    outline: none;
 }
 
-
-.welcome{
-
-    font-size:15px;
-
-    letter-spacing:2px;
-
-    color:var(--text-soft);
-
-    margin-bottom:28px;
-
-    text-transform:uppercase;
-
+.premium-upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(226, 203, 153, 0.35);
 }
 
-
-.hero h1{
-
-    font-family:'Cinzel',serif;
-
-    font-size:72px;
-
-    font-weight:600;
-
-    letter-spacing:6px;
-
-    color:var(--text);
-
-    line-height:1.15;
-
+.premium-upload-btn:active {
+    transform: scale(0.98);
 }
 
-
-.ampersand{
-
-    font-family:'Cinzel',serif;
-
-    font-size:48px;
-
-    color:var(--gold);
-
-    margin:14px 0;
-
+.camera-icon {
+    fill: var(--gold-dark);
 }
 
-
-.date{
-
-    margin-top:28px;
-
-    font-size:16px;
-
-    letter-spacing:4px;
-
-    text-transform:uppercase;
-
-    color:var(--text-soft);
-
+.security-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
-
-.hero-divider{
-
-    width:150px;
-
-    height:2px;
-
-    margin:32px auto 0;
-
-    border-radius:999px;
-
-    background:
-
-    linear-gradient(
-
-        90deg,
-
-        transparent,
-
-        var(--gold),
-
-        transparent
-
-    );
-
+#uploadStatus {
+    font-size: 12px;
+    color: var(--gold-dark);
+    margin-top: 10px;
+    min-height: 15px;
 }
-/*==================================================
-  BUSE & SAMET
-  PREMIUM WEDDING THEME
-  BÖLÜM 2
-  UPLOAD SECTION
-==================================================*/
-
 
 /*==============================
- UPLOAD SECTION
+ GALERİ ALANI (Görseldeki 3'lü Grid)
 ==============================*/
-
-.upload-section{
-
-    width:min(92%,760px);
-
-    margin:0 auto 90px;
-
-    background:rgba(255,255,255,.82);
-
-    backdrop-filter:blur(18px);
-
-    -webkit-backdrop-filter:blur(18px);
-
-    border:1px solid rgba(214,183,122,.25);
-
-    border-radius:32px;
-
-    padding:60px 45px;
-
-    text-align:center;
-
-    box-shadow:var(--shadow);
-
-    position:relative;
-
-    overflow:hidden;
-
+.gallery-section {
+    width: 100%;
+    z-index: 2;
 }
 
-
-.upload-section::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background:
-
-    linear-gradient(
-
-        135deg,
-
-        rgba(214,183,122,.06),
-
-        transparent 55%
-
-    );
-
-    pointer-events:none;
-
+.gallery-title {
+    font-family: 'Cormorant Garish', serif;
+    font-size: 24px;
+    letter-spacing: 3px;
+    text-align: center;
+    color: var(--text-dark);
+    font-weight: 400;
 }
 
-
-.upload-section h2{
-
-    font-family:"Cinzel",serif;
-
-    font-size:36px;
-
-    font-weight:600;
-
-    color:var(--text);
-
-    letter-spacing:2px;
-
-    margin-bottom:18px;
-
+.gallery-deco {
+    font-size: 10px;
+    color: var(--gold-text);
+    text-align: center;
+    margin: 5px 0 20px;
 }
 
-
-.description{
-
-    max-width:520px;
-
-    margin:0 auto 36px;
-
-    color:var(--text-soft);
-
-    font-size:16px;
-
-    line-height:1.9;
-
-}
-/*==============================
- FILE INPUT
-==============================*/
-
-#fileInput{
-
-    display:block;
-
-    width:100%;
-
-    margin:0 auto 28px;
-
-    padding:18px;
-
-    border:2px dashed rgba(214,183,122,.45);
-
-    border-radius:20px;
-
-    background:#FCFAF7;
-
-    color:var(--text-soft);
-
-    font-family:"Montserrat",sans-serif;
-
-    font-size:15px;
-
-    cursor:pointer;
-
-}
-/*==============================
- UPLOAD BUTTON
-==============================*/
-
-#uploadBtn{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:10px;
-
-    min-width:240px;
-
-    padding:17px 34px;
-
-    border:none;
-
-    border-radius:999px;
-
-    background:linear-gradient(
-        135deg,
-        var(--gold),
-        var(--gold-dark)
-    );
-
-    color:#fff;
-
-    font-family:"Montserrat",sans-serif;
-
-    font-size:16px;
-
-    font-weight:600;
-
-    letter-spacing:.4px;
-
-    cursor:pointer;
-
-    box-shadow:
-
-        0 14px 35px rgba(184,146,86,.28);
-
-    transition:.30s;
-
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tam görseldeki gibi 3 kolon */
+    gap: 10px;
+    margin-bottom: 30px;
 }
 
-
-#uploadBtn:hover{
-
-    transform:translateY(-3px);
-
-    box-shadow:
-
-        0 20px 42px rgba(184,146,86,.35);
-
+/* Galeri Kutuları */
+.gallery-grid .gallery-image-wrapper {
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #eaeaea;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    position: relative;
+    cursor: pointer;
+    border: 1px solid rgba(226, 203, 153, 0.2);
+    transition: transform 0.3s ease;
 }
 
-
-#uploadBtn:active{
-
-    transform:scale(.98);
-
+.gallery-grid .gallery-image-wrapper:hover {
+    transform: scale(1.03);
 }
 
-
-#uploadBtn:disabled{
-
-    opacity:.65;
-
-    cursor:not-allowed;
-
-    transform:none;
-
+.gallery-grid img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
+/* Fotoğraf Sayısı Sınırını Gösteren Katman (+23 daha fazla anı gibi) */
+.more-photos-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+}
+
+.more-photos-overlay .count {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.more-photos-overlay .text {
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+    opacity: 0.9;
+}
+
+.loading {
+    grid-column: 1 / -1;
+    padding: 40px;
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+}
 
 /*==============================
- STATUS
+ LIGHTBOX (Büyük Fotoğraf Önizleme)
 ==============================*/
-
-#uploadStatus{
-
-    margin-top:22px;
-
-    min-height:24px;
-
-    font-size:15px;
-
-    font-weight:500;
-
-    color:var(--text-soft);
-
-    line-height:1.7;
-
+#lightbox {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(18, 16, 13, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 9999;
+    padding: 20px;
 }
-/*==================================================
-  BUSE & SAMET
-  PREMIUM WEDDING THEME
-  BÖLÜM 3
-  GALLERY • LIGHTBOX • FOOTER • RESPONSIVE
-==================================================*/
 
+#lightboxImage {
+    max-width: 90%;
+    max-height: 80vh;
+    border-radius: 12px;
+    border: 2px solid var(--gold-light);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+#closeLightbox {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    font-size: 40px;
+    color: #ffffff;
+    cursor: pointer;
+    line-height: 1;
+}
 
 /*==============================
- GALLERY
+ FOOTER (Görseldeki Alt Bilgi)
 ==============================*/
-
-.gallery-section{
-
-    width:min(92%,1200px);
-
-    margin:0 auto 100px;
-
-    text-align:center;
-
+.footer {
+    width: 100%;
+    text-align: center;
+    margin-top: auto;
+    padding-top: 25px;
+    border-top: 1px solid rgba(226, 203, 153, 0.25);
+    z-index: 2;
 }
 
-
-.gallery-section h2{
-
-    font-family:"Cinzel",serif;
-
-    font-size:42px;
-
-    font-weight:600;
-
-    letter-spacing:2px;
-
-    color:var(--text);
-
-}
-
-
-.gallery-divider{
-
-    width:170px;
-
-    height:2px;
-
-    margin:24px auto 55px;
-
-    border-radius:999px;
-
-    background:linear-gradient(
-
-        90deg,
-
-        transparent,
-
-        var(--gold),
-
-        transparent
-
-    );
-
-}
-
-
-/*==============================
- PHOTO GRID
-==============================*/
-
-#photoGallery{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-
-    gap:26px;
-
-    align-items:start;
-
-}
-
-
-.loading{
-
-    grid-column:1/-1;
-
-    padding:50px;
-
-    color:var(--text-soft);
-
-    font-size:16px;
-
-}
-
-.gallery-image{
-
-    width:100%;
-
-    aspect-ratio:4/5;
-
-    object-fit:cover;
-
-    border-radius:28px;
-
-    cursor:pointer;
-
-    background:#fff;
-
-    padding:8px;
-
-    border:1px solid rgba(214,183,122,.25);
-
-    box-shadow:
-
-        0 20px 45px rgba(0,0,0,.12);
-
-    transition:
-
-        transform .4s ease,
-
-        box-shadow .4s ease;
-
-}
-    .gallery-image:hover{
-
-    transform:translateY(-12px);
-
-    box-shadow:
-
-        0 35px 70px rgba(0,0,0,.18);
-
-}
-
-
-/*==============================
- LIGHTBOX
-==============================*/
-
-#lightbox{
-
-    position:fixed;
-
-    inset:0;
-
-    display:none;
-
-    justify-content:center;
-
-    align-items:center;
-
-    background:rgba(18,18,18,.92);
-
-    backdrop-filter:blur(12px);
-
-    -webkit-backdrop-filter:blur(12px);
-
-    z-index:9999;
-
-    padding:25px;
-
-}
-
-
-#lightboxImage{
-
-    max-width:92vw;
-
-    max-height:88vh;
-
-    border-radius:24px;
-
-    border:4px solid #ffffff;
-
-    box-shadow:
-
-        0 35px 80px rgba(0,0,0,.45);
-
-    animation:zoomIn .35s ease;
-
-}
-
-
-@keyframes zoomIn{
-
-    from{
-
-        opacity:0;
-
-        transform:scale(.94);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:scale(1);
-
-    }
-
-}
-
-
-#closeLightbox{
-
-    position:absolute;
-
-    top:28px;
-
-    right:34px;
-
-    font-size:48px;
-
-    color:#ffffff;
-
-    cursor:pointer;
-
-    transition:.30s;
-
-}
-
-
-#closeLightbox:hover{
-
-    color:var(--gold);
-
-    transform:rotate(90deg);
-
-}
-
-
-/*==============================
- FOOTER
-==============================*/
-
-.footer{
-
-    width:min(92%,900px);
-
-    margin:80px auto 60px;
-
-    text-align:center;
-
-}
-
-
-.footer-divider{
-
-    width:180px;
-
-    height:2px;
-
-    margin:0 auto 30px;
-
-    border-radius:999px;
-
-    background:linear-gradient(
-
-        90deg,
-
-        transparent,
-
-        var(--gold),
-
-        transparent
-
-    );
-
-}
-
-
-.footer p{
-
-    color:var(--text-soft);
-
-    line-height:1.9;
-
-    font-size:15px;
-
-    margin-bottom:8px;
-
-}
-
-
-/*==============================
- SCROLLBAR
-==============================*/
-
-::-webkit-scrollbar{
-
-    width:10px;
-
-}
-
-
-::-webkit-scrollbar-track{
-
-    background:#F3EFE9;
-
-}
-
-
-::-webkit-scrollbar-thumb{
-
-    background:linear-gradient(
-
-        var(--gold),
-
-        var(--gold-dark)
-
-    );
-
-    border-radius:999px;
-
-}
-
-
-/*==============================
- TEXT SELECTION
-==============================*/
-
-::selection{
-
-    background:rgba(214,183,122,.35);
-
-}
-
-
-/*==============================
- RESPONSIVE
-==============================*/
-
-@media(max-width:900px){
-
-    .hero{
-
-        padding:70px 28px;
-
-        margin:25px 18px 50px;
-
-    }
-
-    .hero h1{
-
-        font-size:52px;
-
-        letter-spacing:3px;
-
-    }
-
-    .ampersand{
-
-        font-size:40px;
-
-    }
-
-    .upload-section{
-
-        padding:45px 28px;
-
-    }
-
-}
-
-
-@media(max-width:600px){
-
-    .hero h1{
-
-        font-size:40px;
-
-    }
-
-    .welcome{
-
-        font-size:13px;
-
-        letter-spacing:1px;
-
-    }
-
-    .gallery-section h2,
-
-    .upload-section h2{
-
-        font-size:30px;
-
-    }
-
-    #uploadBtn{
-
-        width:100%;
-
-    }
-
-    #photoGallery{
-
-        grid-template-columns:1fr;
-
-    }
-
+.footer-note {
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 280px;
+    margin: 0 auto;
 }
