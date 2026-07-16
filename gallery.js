@@ -1,82 +1,56 @@
 /* ===========================================
    GALLERY.JS
    Görsel deneyim ve galeri yardımcı işlemleri
-   script.js ile tamamen uyumludur.
+   Yeni Premium Mobil Tasarımla %100 Uyumludur.
 =========================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-
     const gallery = document.getElementById("photoGallery");
-
     if (!gallery) return;
 
     /* ===========================================
-       YENİ FOTOĞRAFLARI İZLE
+       YENİ EKLENEN FOTOĞRAFLARI İZLE (Yumuşak Belirme)
     =========================================== */
-
     const observer = new MutationObserver(() => {
-
-        const images = gallery.querySelectorAll(".gallery-image");
+        // Yeni yapımızdaki resimleri buluyoruz (wrapper içindeki img'ler)
+        const images = gallery.querySelectorAll(".gallery-image-wrapper img");
 
         images.forEach((img) => {
-
-            /* Aynı fotoğrafı tekrar işlememesi için */
+            // Aynı fotoğrafı tekrar işlememesi için kontrol
             if (img.dataset.ready === "true") return;
-
             img.dataset.ready = "true";
 
-            /* Resim sürüklemeyi kapat */
-            img.draggable = false;
+            // Görsel koruma önlemleri
+            img.draggable = false; // Sürüklemeyi engelle
+            img.addEventListener("contextmenu", (e) => e.preventDefault()); // Sağ tıkı engelle
 
-            /* Sağ tık menüsünü kapat */
-            img.addEventListener("contextmenu", (e) => {
-
-                e.preventDefault();
-
-            });
-
-            /* Yüklenmeden önce gizle */
+            // İlk başta görseli görünmez yap ve hafif aşağıda konumlandır
             img.style.opacity = "0";
-            img.style.transform = "translateY(18px) scale(.98)";
+            img.style.transform = "translateY(15px) scale(0.96)";
+            img.style.transition = "opacity 0.6s ease, transform 0.6s ease";
 
-            /* Yüklendiğinde animasyon */
+            // Görsel tamamen yüklendiğinde yumuşakça göster
             if (img.complete) {
-
-                reveal(img);
-
+                revealImage(img);
             } else {
-
-                img.onload = () => reveal(img);
-
+                img.onload = () => revealImage(img);
             }
-
         });
-
     });
 
+    // Galeri içindeki değişimleri izlemeye başla
     observer.observe(gallery, {
-
         childList: true,
         subtree: true
-
     });
-
 });
 
 /* ===========================================
-   GÖRSEL ANİMASYONU
+   GÖRSEL BELİRME ANİMASYONU
 =========================================== */
-
-function reveal(img) {
-
+function revealImage(img) {
     requestAnimationFrame(() => {
-
-        img.style.transition =
-            "opacity .45s ease, transform .45s ease";
-
         img.style.opacity = "1";
         img.style.transform = "translateY(0) scale(1)";
-
     });
-
 }
