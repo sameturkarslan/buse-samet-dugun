@@ -1,6 +1,7 @@
-// Firebase SDK
+// Firebase App (Temel SDK)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
+// Firestore SDK (Fotoğraf bilgilerini ve linklerini tutacak veritabanı)
 import {
   getFirestore,
   collection,
@@ -11,10 +12,17 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-/* ===========================================
-   FIREBASE CONFIG
-=========================================== */
+// Storage SDK (Asıl fotoğraf dosyalarını yükleyeceğimiz alan - ChatGPT'nin unuttuğu kısım)
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
+/* ===========================================
+   FIREBASE CONFIG (Senin Bilgilerin)
+=========================================== */
 const firebaseConfig = {
   apiKey: "AIzaSyDuNX14Q-a1Xgh-pNgyFd1OIInRI0Tnxi8",
   authDomain: "buse-samet-dugun.firebaseapp.com",
@@ -25,22 +33,25 @@ const firebaseConfig = {
 };
 
 /* ===========================================
-   FIREBASE BAŞLAT
+   FIREBASE BAŞLATMA
 =========================================== */
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app); // Storage başlatıldı
 
 /* ===========================================
-   EXPORT
+   EXPORT (Diğer JS dosyalarında kullanabilmek için dışa aktarma)
 =========================================== */
-
 export {
   db,
+  storage,
   collection,
   addDoc,
   onSnapshot,
   query,
   orderBy,
-  serverTimestamp
+  serverTimestamp,
+  ref,
+  uploadBytes,
+  getDownloadURL
 };
