@@ -1,159 +1,104 @@
-/*==============================
- BUSE & SAMET
- PREMIUM WEDDING PAGE
-==============================*/
-
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buse & Samet - Düğün Anıları</title>
+    <!-- Şık serif (Cormorant) ve sans-serif (Montserrat) yazı tipleri -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garish:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- CSS dosyanı buraya bağlayacaksın -->
+    <link rel="stylesheet" href="style.css"> 
+</head>
 <body>
 
+    <!-- Tüm içeriği görseldeki gibi dikey mobil çerçevede tutan kapsayıcı -->
+    <div class="wedding-container">
 
-<!-- HERO -->
-
-<section class="hero">
-
-    <p class="welcome">
-        Mutluluğumuza ortak olun
-    </p>
-
-
-    <h1>
-        BUSE
-        <br>
-        <span class="ampersand">&</span>
-        <br>
-        SAMET
-    </h1>
-
-
-    <p class="date">
-        2026
-    </p>
-
-
-    <div class="hero-divider"></div>
-
-</section>
-
-
-
-
-<!-- FOTOĞRAF YÜKLEME -->
-
-<section class="upload-section">
-
-
-    <h2>
-        Fotoğraf Paylaş
-    </h2>
-
-
-    <p class="description">
-
-        Düğünümüzden güzel anıları bizimle paylaşabilirsiniz.
-
-    </p>
-
-
-
-    <input
-        type="file"
-        id="fileInput"
-        accept="image/*">
-
-
-
-    <button id="uploadBtn">
-
-        Fotoğraf Yükle
-
-    </button>
-
-
-
-    <p id="uploadStatus"></p>
-
-
-</section>
-
-
-
-
-
-<!-- ANILARIMIZ -->
-
-<section class="gallery-section">
-
-
-    <h2>
-        Anılarımız
-    </h2>
-
-
-    <div class="gallery-divider"></div>
-
-
-
-    <div id="photoGallery">
-
-        <div class="loading">
-
-            Fotoğraflar yükleniyor...
-
+        <!-- MENÜ BUTONU (Sağ üstteki minimalist üç çizgi) -->
+        <div class="menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
 
+        <!-- HERO / BAŞLIK ALANI -->
+        <header class="hero">
+            <div class="heart-divider">♥</div>
+            
+            <h1 class="names">
+                BUSE 
+                <span>&</span> 
+                SAMET
+            </h1>
+
+            <div class="date-section">
+                <span class="line"></span>
+                <span class="date">19 EYLÜL 2026</span>
+                <span class="line"></span>
+            </div>
+
+            <p class="welcome-text">
+                Mutluluğumuza ortak olduğunuz için teşekkür ederiz.
+            </p>
+            
+            <div class="heart-divider">♥</div>
+        </header>
+
+
+        <!-- FOTOĞRAF YÜKLEME ALANI -->
+        <section class="upload-section">
+            <!-- Çirkin varsayılan input gizli tutuluyor, JS ile butona bağlanacak -->
+            <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
+            
+            <button id="uploadBtn" class="premium-upload-btn">
+                <!-- Kamera İkonu -->
+                <svg class="camera-icon" viewBox="0 0 24 24" width="20" height="20">
+                    <path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/>
+                </svg>
+                FOTOĞRAF YÜKLE
+            </button>
+
+            <p class="security-note">
+                <span class="shield-icon">🛡️</span> Fotoğraflarınız güvende ♥
+            </p>
+            
+            <!-- Yükleme durumu bildirimleri için -->
+            <p id="uploadStatus"></p>
+        </section>
+
+
+        <!-- ANILARIMIZ (GALERİ) -->
+        <section class="gallery-section">
+            <h2 class="gallery-title">ANILARIMIZ</h2>
+            <div class="gallery-deco">✦</div>
+
+            <div id="photoGallery" class="gallery-grid">
+                <!-- Fotoğraflar buraya JavaScript ile dinamik olarak gelecek -->
+                <div class="loading">Fotoğraflar yükleniyor...</div>
+            </div>
+        </section>
+
+
+        <!-- FOOTER (ALT BİLGİ) -->
+        <footer class="footer">
+            <div class="heart-divider">♥</div>
+            <p class="footer-note">
+                Bu özel günümüzde çektiğiniz fotoğrafları bizimle paylaşmanız bizi çok mutlu eder.
+            </p>
+            <div class="heart-divider">♥</div>
+        </footer>
 
     </div>
 
+    <!-- LIGHTBOX (Fotoğrafa tıklayınca büyük açılan ekran) -->
+    <div id="lightbox">
+        <span id="closeLightbox">&times;</span>
+        <img id="lightboxImage" src="" alt="Büyük Görsel">
+    </div>
 
-</section>
-
-
-
-
-
-<!-- LIGHTBOX -->
-
-<div id="lightbox">
-
-
-    <span id="closeLightbox">
-
-        ×
-
-    </span>
-
-
-
-    <img
-        id="lightboxImage"
-        src=""
-        alt="">
-
-</div>
-
-
-
-
-
-<!-- FOOTER -->
-
-<footer class="footer">
-
-
-    <div class="footer-divider"></div>
-
-
-    <p>
-        Buse & Samet
-    </p>
-
-
-    <p>
-        En güzel anılarımızla...
-    </p>
-
-
-</footer>
-
-
-
+    <!-- JS kodlarını buraya bağlayabilirsin -->
+    <script src="script.js"></script>
 </body>
+</html>
