@@ -2,8 +2,8 @@
    SCRIPT.JS (Doğrudan Drive'a Çoklu Fotoğraf & Video Yükleme)
 ========================================================= */
 
-// Aldığın Web Uygulaması URL'sini buraya tanımladık
-https://script.google.com/macros/s/AKfycbxnYZ1X--qg83dUVd8Z53FOu72dBSg9_TmiNphrwE6LWzj4u1Tf65es5nFjUggMBjTMLw/exec
+// Güncel Web Uygulaması URL'sini buraya tam olarak tanımladık
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxnYZ1X--qg83dUVd8Z53FOu72dBSg9_TmiNphrwE6LWzj4u1Tf65es5nFjUggMBjTMLw/exec";
 
 // HTML'e gizli bir dosya seçici (input) ekliyoruz
 const fileInput = document.createElement("input");
@@ -78,7 +78,6 @@ function toBase64(file) {
 const FIREBASE_PROJECT_ID = "buse-samet-dugun";
 
 // HTML'de fotoğrafların listeleneceği alanın id'sini buraya yazmalısın. 
-// Örneğin HTML'de <div id="gallery"></div> şeklinde bir alanın olmalı.
 const galleryContainer = document.getElementById("gallery"); 
 
 async function loadPhotos() {
@@ -104,7 +103,7 @@ async function loadPhotos() {
           const imgElement = document.createElement("img");
           imgElement.src = imgUrl;
           
-          // Resmin stili (Bunu kendi CSS'ine veya tasarımına göre değiştirebilirsin)
+          // Resmin stili
           imgElement.style.width = "300px"; 
           imgElement.style.margin = "10px";
           imgElement.style.borderRadius = "10px";
