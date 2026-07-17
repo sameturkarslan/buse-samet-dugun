@@ -1,11 +1,11 @@
 /* =========================================================
-   SCRIPT.JS (Doğrudan Drive'a Çoklu Fotoğraf & Video Yükleme)
+   SCRIPT.JS (Çoklu Fotoğraf & Video Yükleme ve Gelişmiş Galeri)
 ========================================================= */
 
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxnYZ1X--qg83dUVd8Z53FOu72dBSg9_TmiNphrwE6LWzj4u1Tf65es5nFjUggMBjTMLw/exec";
 const FIREBASE_PROJECT_ID = "buse-samet-dugun";
 
-// HTML elementlerini doğru ID'ler ile eşleştiriyoruz
+// HTML Elementleri
 const uploadBtn = document.getElementById("uploadBtn");
 const fileInput = document.getElementById("hiddenFileInput");
 const uploadStatus = document.getElementById("uploadStatus");
@@ -14,13 +14,20 @@ const lightbox = document.getElementById("lightbox");
 const lightboxImage = document.getElementById("lightboxImage");
 const closeLightbox = document.getElementById("closeLightbox");
 
-// Butona tıklanınca gizli dosya seçiciyi tetikle
+// Galeri Gezinme ve Dosya Tipi Hafızası
+let allMedia = []; // { url: "...", type: "image" veya "video" }
+let currentMediaIndex = 0;
+
+// Tekrar hem fotoğraf hem video kabul edecek şekle getiriyoruz
+if (fileInput) {
+  fileInput.setAttribute("accept", "image/*,video/*");
+}
+
 if (uploadBtn && fileInput) {
   uploadBtn.addEventListener("click", () => {
     fileInput.click();
   });
 
-  // Dosya seçildiğinde yükleme işlemini başlat
   fileInput.addEventListener("change", async (event) => {
     const files = event.target.files;
     if (files.length === 0) return;
@@ -56,20 +63,19 @@ if (uploadBtn && fileInput) {
     }
 
     uploadBtn.innerText = "YÜKLEME TAMAMLANDI!";
-    if (uploadStatus) uploadStatus.innerText = "Fotoğraflar başarıyla gönderildi, birazdan galeride belirecektir. ♥";
+    if (uploadStatus) uploadStatus.innerText = "Dosyalarınız başarıyla eklendi! ♥";
     
     setTimeout(() => {
       uploadBtn.innerHTML = `<svg class="camera-icon" viewBox="0 0 24 24" width="20" height="20" style="fill:var(--gold-dark); margin-right:10px;"><path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg> FOTOĞRAF YÜKLE`;
       uploadBtn.disabled = false;
       if (uploadStatus) uploadStatus.innerText = "";
-    }, 3500);
+    }, 3000);
     
     fileInput.value = ""; 
-    setTimeout(loadPhotos, 2000); // 2 saniye sonra galeriyi otomatik yenile
+    setTimeout(loadPhotos, 2000);
   });
 }
 
-// Dosyayı Base64 formatına çeviren yardımcı fonksiyon
 function toBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -79,7 +85,12 @@ function toBase64(file) {
   });
 }
 
-// Firebase Firestore'dan fotoğrafları çekip premium CSS grid yapısına göre listeleme
+// Dosya uzantısından veya mimeType'dan video olup olmadığını anlama
+function isVideoUrl(url) {
+  return url.includes(".mp4") || url.includes(".mov") || url.includes(".avi") || url.includes(".webm") || url.includes("video");
+}
+
+// Medyaları Çekme ve Ekrana Basma
 async function loadPhotos() {
   if (!galleryContainer) return;
 
@@ -89,51 +100,138 @@ async function loadPhotos() {
 
     if (data.documents && data.documents.length > 0) {
       galleryContainer.innerHTML = ""; 
+      allMedia = []; 
       
-      data.documents.forEach(doc => {
+      data.documents.forEach((doc, index) => {
         const fields = doc.fields;
         
         if (fields && fields.imageUrl && fields.imageUrl.stringValue) {
-          const imgUrl = fields.imageUrl.stringValue;
+          const mediaUrl = fields.imageUrl.stringValue;
+          const isVideo = isVideoUrl(mediaUrl);
           
-          // CSS yapısına tam uyum için wrapper oluşturuluyor
+          allMedia.push({ url: mediaUrl, type: isVideo ? "video" : "image" });
+          
           const wrapper = document.createElement("div");
           wrapper.className = "gallery-image-wrapper";
           
-          const imgElement = document.createElement("img");
-          imgElement.src = imgUrl;
-          imgElement.alt = "Düğün Anısı";
+          if (isVideo) {
+            // Eğer videoysa galeride önizleme olarak küçük bir video ve oynatma simgesi basıyoruz
+            wrapper.innerHTML = `
+              <video src="${mediaUrl}" muted style="width:100%; height:100%; object-fit:cover;"></video>
+              <div style="position:absolute; inset:0; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.2); color:#fff; font-size:20px;">▶</div>
+            `;
+          } else {
+            // Fotoğraf ise normal resim basıyoruz
+            const imgElement = document.createElement("img");
+            imgElement.src = mediaUrl;
+            imgElement.alt = "Düğün Anısı";
+            wrapper.appendChild(imgElement);
+          }
           
-          // Resme tıklanınca Lightbox (Büyük ekran) açma olayı
           wrapper.addEventListener("click", () => {
-             if (lightbox && lightboxImage) {
-                 lightboxImage.src = imgUrl;
-                 lightbox.style.display = "flex";
-             }
+             currentMediaIndex = index;
+             openLightboxWithIndex(currentMediaIndex);
           });
 
-          wrapper.appendChild(imgElement);
           galleryContainer.appendChild(wrapper);
         }
       });
     } else {
-        galleryContainer.innerHTML = `<div class="loading">Henüz fotoğraf yüklenmedi. İlk fotoğrafı siz yükleyin! ♥</div>`;
+        galleryContainer.innerHTML = `<div class="loading">Henüz medya yüklenmedi. İlk paylaşımı siz yapın! ♥</div>`;
     }
   } catch (error) {
-    console.error("Fotoğraflar yüklenirken hata oluştu:", error);
-    galleryContainer.innerHTML = `<div class="loading">Fotoğraflar şu an yüklenemedi.</div>`;
+    console.error("Medya yüklenirken hata oluştu:", error);
   }
 }
 
-// Lightbox Kapatma Olayları
+// Büyük Ekran Önizleme Sistemi (Hem video hem fotoğraf destekli)
+function openLightboxWithIndex(index) {
+  if (!lightbox || !lightboxImage || !allMedia[index]) return;
+  
+  const media = allMedia[index];
+  
+  // Önceki video kalıntılarını temizle
+  const existingVideo = lightbox.querySelector("video");
+  if (existingVideo) existingVideo.remove();
+  lightboxImage.style.display = "none";
+
+  if (media.type === "video") {
+    // Büyük ekranda video oynatıcı oluştur
+    const videoElement = document.createElement("video");
+    videoElement.src = media.url;
+    videoElement.controls = true;
+    videoElement.autoplay = true;
+    videoElement.style.maxWidth = "90%";
+    videoElement.style.maxHeight = "80vh";
+    videoElement.style.borderRadius = "12px";
+    videoElement.style.border = "2px solid var(--gold-light)";
+    
+    lightbox.appendChild(videoElement);
+  } else {
+    // Fotoğraf ise mevcut görsel alanını göster
+    lightboxImage.src = media.url;
+    lightboxImage.style.display = "block";
+  }
+  
+  lightbox.style.display = "flex";
+}
+
+// Gezinme Fonksiyonları
+function nextMedia() {
+  if (allMedia.length === 0) return;
+  currentMediaIndex = (currentMediaIndex + 1) % allMedia.length;
+  openLightboxWithIndex(currentMediaIndex);
+}
+
+function prevMedia() {
+  if (allMedia.length === 0) return;
+  currentMediaIndex = (currentMediaIndex - 1 + allMedia.length) % allMedia.length;
+  openLightboxWithIndex(currentMediaIndex);
+}
+
+// Swipe (Kaydırma) Algılayıcı
+let touchStartX = 0;
+let touchEndX = 0;
+
+if (lightbox) {
+  lightbox.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  lightbox.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, { passive: true });
+}
+
+function handleSwipe() {
+  const swipeThreshold = 50;
+  if (touchStartX - touchEndX > swipeThreshold) nextMedia();
+  else if (touchEndX - touchStartX > swipeThreshold) prevMedia();
+}
+
+// Kapatma Mekanizması
 if (closeLightbox && lightbox) {
     closeLightbox.addEventListener("click", () => {
         lightbox.style.display = "none";
+        const v = lightbox.querySelector("video"); if(v) v.remove();
     });
     lightbox.addEventListener("click", (e) => {
-        if (e.target === lightbox) lightbox.style.display = "none";
+        if (e.target === lightbox) {
+          lightbox.style.display = "none";
+          const v = lightbox.querySelector("video"); if(v) v.remove();
+        }
     });
 }
 
-// Sayfa açıldığında fotoğrafları yükle
+document.addEventListener("keydown", (e) => {
+  if (!lightbox || lightbox.style.display !== "flex") return;
+  if (e.key === "ArrowRight") nextMedia();
+  if (e.key === "ArrowLeft") prevMedia();
+  if (e.key === "Escape") {
+    lightbox.style.display = "none";
+    const v = lightbox.querySelector("video"); if(v) v.remove();
+  }
+});
+
 window.onload = loadPhotos;
