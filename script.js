@@ -2,7 +2,6 @@
    SCRIPT.JS (Firebase SDK Tabanlı Ultra Hızlı Medya Motoru)
 ========================================================= */
 
-// firebase.js dosyasından ihtiyacımız olan fonksiyonları ve başlatılan servisleri çekiyoruz
 import { 
   db, 
   storage, 
@@ -30,16 +29,16 @@ const closeLightbox = document.getElementById("closeLightbox");
 let allMedia = []; 
 let currentMediaIndex = 0;
 
-// Input ayarları (Fotoğraf ve Video)
 if (fileInput) {
   fileInput.setAttribute("accept", "image/*,video/*");
 }
 
-// Buton Tetikleyici
+// =========================================================
+// ULTRA HIZLI FIREBASE STORAGE YÜKLEME MOTORU
+// =========================================================
 if (uploadBtn && fileInput) {
   uploadBtn.addEventListener("click", () => fileInput.click());
 
-  // DOSYA YÜKLEME MOTORU (Firebase Storage - Ultra Hızlı)
   fileInput.addEventListener("change", async (event) => {
     const files = event.target.files;
     if (files.length === 0) return;
@@ -52,17 +51,15 @@ if (uploadBtn && fileInput) {
       if (uploadStatus) uploadStatus.innerText = `Yükleniyor (${i + 1}/${files.length}): ${file.name}`;
 
       try {
-        // 1. Benzersiz bir dosya adı oluşturup Firebase Storage referansı alıyoruz
+        // Benzersiz dosya adı üreterek Firebase Storage'a yükleme yapıyoruz (Zaman aşımı veya boyut limiti yok)
         const uniqueFileName = `${Date.now()}_${file.name}`;
         const storageRef = ref(storage, `dugun_medya/${uniqueFileName}`);
 
-        // 2. Dosyayı doğrudan binary olarak yüklüyoruz (Base64 yok, zaman aşımı yok!)
+        // Binary yükleme performansı
         const snapshot = await uploadBytes(storageRef, file);
-
-        // 3. Yüklenen dosyanın doğrudan oynatılabilir/indirilebilir linkini alıyoruz
         const downloadUrl = await getDownloadURL(snapshot.ref);
 
-        // 4. Bu linki anlık olarak Firestore veritabanına kaydediyoruz
+        // Linki Firestore'a kaydediyoruz
         await addDoc(collection(db, "photos"), {
           imageUrl: downloadUrl,
           mimeType: file.type,
@@ -71,15 +68,15 @@ if (uploadBtn && fileInput) {
 
       } catch (error) {
         console.error("Yükleme hatası:", error);
-        if (uploadStatus) uploadStatus.innerText = "Bir dosya yüklenirken hata oluştu!";
+        if (uploadStatus) uploadStatus.innerText = "Yükleme sırasında bir hata oluştu!";
       }
     }
 
     uploadBtn.innerText = "YÜKLEME TAMAMLANDI!";
-    if (uploadStatus) uploadStatus.innerText = "Tüm medyalar başarıyla eklendi! ♥";
+    if (uploadStatus) uploadStatus.innerText = "Tüm anılarınız başarıyla eklendi! ♥";
     
     setTimeout(() => {
-      uploadBtn.innerHTML = `<svg class="camera-icon" viewBox="0 0 24 24" width="20" height="20" style="fill:var(--gold-dark); margin-right:10px;"><path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg> FOTOĞRAF YÜKLE`;
+      uploadBtn.innerHTML = `<svg class="camera-icon" viewBox="0 0 24 24" width="20" height="20" style="fill:var(--gold-dark); margin-right:10px;"><path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg> FOTOĞRAF / VİDEO YÜKLE`;
       uploadBtn.disabled = false;
       if (uploadStatus) uploadStatus.innerText = "";
     }, 3000);
@@ -89,7 +86,7 @@ if (uploadBtn && fileInput) {
 }
 
 // =========================================================
-// REALTIME GALERİ MOTORU (onSnapshot ile Canlı Listeleme)
+// REALTIME CANLI GALERİ SİSTEMİ (Sayfa yenilemeden düşer)
 // =========================================================
 const q = query(collection(db, "photos"), orderBy("createdAt", "desc"));
 
@@ -101,8 +98,7 @@ onSnapshot(q, (snapshot) => {
   snapshot.forEach((doc) => {
     const data = doc.data();
     if (data.imageUrl) {
-      // MimeType kontrolü veya link uzantısına göre tipi belirliyoruz
-      const isVideo = data.mimeType ? data.mimeType.startsWith("video/") : data.imageUrl.includes(".mp4");
+      const isVideo = data.mimeType ? data.mimeType.startsWith("video/") : data.imageUrl.toLowerCase().includes(".mp4");
       allMedia.push({ url: data.imageUrl, type: isVideo ? "video" : "image" });
     }
   });
@@ -112,14 +108,14 @@ onSnapshot(q, (snapshot) => {
     return;
   }
 
-  // Medyaları ekrana basıyoruz
   allMedia.forEach((media, index) => {
     const wrapper = document.createElement("div");
     wrapper.className = "gallery-image-wrapper";
 
     if (media.type === "video") {
+      // Yerel tarayıcı video oynatıcısıyla tam uyumlu mini önizleme
       wrapper.innerHTML = `
-        <video src="${media.url}" muted style="width:100%; height:100%; object-fit:cover;"></video>
+        <video src="${media.url}" muted style="width:100%; height:100%; object-fit:cover; pointer-events:none;"></video>
         <div style="position:absolute; inset:0; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.15); color:#fff; font-size:24px;">▶</div>
       `;
     } else {
@@ -140,19 +136,20 @@ onSnapshot(q, (snapshot) => {
 });
 
 // =========================================================
-// GELİŞMİŞ LIGHTBOX & KAYDIRMA (SWIPE) MOTORU
+// PREMIUM LIGHTBOX & SAĞA-SOLA KAYDIRMA (SWIPE) SİSTEMİ
 // =========================================================
 function openLightboxWithIndex(index) {
   if (!lightbox || !lightboxImage || !allMedia[index]) return;
   
   const media = allMedia[index];
   
-  // Önceki video/oynatıcıları temizle
+  // Önceki video yapılarını sıfırla
   const existingVideo = lightbox.querySelector("video");
   if (existingVideo) existingVideo.remove();
   lightboxImage.style.display = "none";
 
   if (media.type === "video") {
+    // Büyük ekranda kusursuz oynatıcı entegrasyonu
     const videoElement = document.createElement("video");
     videoElement.src = media.url;
     videoElement.controls = true;
@@ -183,7 +180,7 @@ function prevMedia() {
   openLightboxWithIndex(currentMediaIndex);
 }
 
-// %100 Kararlı Swipe (Sağa-Sola Kaydırma)
+// %100 Stabil Mobil Kaydırma Algoritması
 let touchStartX = 0;
 let touchEndX = 0;
 
@@ -204,7 +201,7 @@ function handleSwipe() {
   else if (touchEndX - touchStartX > swipeThreshold) prevMedia(); 
 }
 
-// Kapatma Aksiyonları
+// Kapatma Yönetimi
 if (closeLightbox && lightbox) {
   const closeAll = () => {
     lightbox.style.display = "none";
@@ -216,7 +213,7 @@ if (closeLightbox && lightbox) {
   });
 }
 
-// Klavye Kontrolleri
+// Masaüstü testleri için klavye ok tuşları desteği
 document.addEventListener("keydown", (e) => {
   if (!lightbox || lightbox.style.display !== "flex") return;
   if (e.key === "ArrowRight") nextMedia();
