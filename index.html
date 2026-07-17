@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buse & Samet - Düğün Anıları</title>
+    <!-- Şık serif (Cormorant) ve sans-serif (Montserrat) yazı tipleri -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garish:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
@@ -11,38 +12,56 @@
 </head>
 <body>
 
+    <!-- Tüm içeriği dikey mobil çerçevede tutan kapsayıcı -->
     <div class="wedding-container">
 
+        <!-- MENÜ BUTONU (Sağ üstteki minimalist üç çizgi) -->
         <div class="menu-btn">
             <span></span>
             <span></span>
             <span></span>
         </div>
 
+        <!-- HERO / BAŞLIK ALANI -->
         <header class="hero">
             <div class="heart-divider">♥</div>
-            <h1 class="names">BUSE <span>&</span> SAMET</h1>
+            
+            <h1 class="names">
+                BUSE 
+                <span>&</span> 
+                SAMET
+            </h1>
+
             <div class="date-section">
                 <span class="line"></span>
                 <span class="date">19 EYLÜL 2026</span>
                 <span class="line"></span>
             </div>
-            <p class="welcome-text">Mutluluğumuza ortak olduğunuz için teşekkür ederiz.</p>
+
+            <p class="welcome-text">
+                Mutluluğumuza ortak olduğunuz için teşekkür ederiz.
+            </p>
+            
             <div class="heart-divider">♥</div>
         </header>
 
-        <!-- FOTOĞRAF YÜKLEME ALANI -->
+        <!-- FOTOĞRAF / VİDEO YÜKLEME ALANI -->
         <section class="upload-section">
-            <!-- input id'si çakışmayı önlemek için düzeltildi -->
             <input type="file" id="hiddenFileInput" accept="image/*,video/*" multiple style="display: none;">
             
             <button id="uploadBtn" class="premium-upload-btn">
+                <!-- Kamera İkonu -->
                 <svg class="camera-icon" viewBox="0 0 24 24" width="20" height="20">
                     <path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/>
                 </svg>
-                FOTOĞRAF YÜKLE
+                FOTOĞRAF / VİDEO YÜKLE
             </button>
-            <p class="security-note"><span class="shield-icon">🛡️</span> Fotoğraflarınız güvende ♥</p>
+
+            <p class="security-note">
+                <span class="shield-icon">🛡️</span> Dosyalarınız güvende ♥
+            </p>
+            
+            <!-- Yükleme durumu bildirimleri için -->
             <p id="uploadStatus"></p>
         </section>
 
@@ -50,14 +69,18 @@
         <section class="gallery-section">
             <h2 class="gallery-title">ANILARIMIZ</h2>
             <div class="gallery-deco">✦</div>
+
             <div id="photoGallery" class="gallery-grid">
-                <div class="loading">Fotoğraflar yükleniyor...</div>
+                <div class="loading">Medyalar yükleniyor...</div>
             </div>
         </section>
 
+        <!-- FOOTER (ALT BİLGİ) -->
         <footer class="footer">
             <div class="heart-divider">♥</div>
-            <p class="footer-note">Bu özel günümüzde çektiğiniz fotoğrafları bizimle paylaşmanız bizi çok mutlu eder.</p>
+            <p class="footer-note">
+                Bu özel günümüzde çektiğiniz fotoğrafları ve videoları bizimle paylaşmanız bizi çok mutlu eder.
+            </p>
             <div class="heart-divider">♥</div>
         </footer>
 
@@ -69,8 +92,7 @@
         <img id="lightboxImage" src="" alt="Büyük Görsel">
     </div>
 
-    <!-- JS bağlantısı -->
-    <script src="script.js"></script>
-    <script src="gallery.js"></script>
+    <!-- Ana JS Motoru (Firebase importları için module tipinde bağlandı) -->
+    <script type="module" src="script.js"></script>
 </body>
 </html>
