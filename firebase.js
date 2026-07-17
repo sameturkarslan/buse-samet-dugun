@@ -3,14 +3,15 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL, uploadString } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-// Kendi Firebase projenin SDK Config bilgileri kanka (Firebase Console'dan alıp burayı doldur)
+// Senin Firebase projenin gerçek config bilgileri kanka
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDuNX14Q-a1Xgh-pNgyFd1OIInRI0Tnxi8",
+  authDomain: "buse-samet-dugun.firebaseapp.com",
+  projectId: "buse-samet-dugun",
+  storageBucket: "buse-samet-dugun.firebasestorage.app",
+  messagingSenderId: "516688924747",
+  appId: "1:516688924747:web:a46db54ad2f4333c95bdce",
+  measurementId: "G-CSDCLWE3ML"
 };
 
 // Servisleri başlatıyoruz
@@ -18,7 +19,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// script.js dosyasının tüm bu yetenekleri hatasız okuması için eksiksiz dışa aktarıyoruz
+// script.js dosyasının her şeyi hatasız okuması için dışa aktarıyoruz
 export { 
   db, 
   storage, 
