@@ -1,5 +1,5 @@
 /* =========================================================
-   SCRIPT.JS (Firebase SDK Tabanlı Ultra Hızlı Medya Motoru)
+   SCRIPT.JS (Ultra Hızlı - Sıkıştırmalı Medya Motoru)
 ========================================================= */
 
 import { 
@@ -29,37 +29,42 @@ const closeLightbox = document.getElementById("closeLightbox");
 let allMedia = []; 
 let currentMediaIndex = 0;
 
+// Telefon kilitlenmelerini önlemek için kabul formatını en kararlı hale getiriyoruz
 if (fileInput) {
   fileInput.setAttribute("accept", "image/*,video/*");
 }
 
-// =========================================================
-// ULTRA HIZLI FIREBASE STORAGE YÜKLEME MOTORU
-// =========================================================
 if (uploadBtn && fileInput) {
   uploadBtn.addEventListener("click", () => fileInput.click());
 
   fileInput.addEventListener("change", async (event) => {
-    const files = event.target.files;
+    const files = Array.from(event.target.files);
     if (files.length === 0) return;
 
     uploadBtn.innerText = "YÜKLENİYOR...";
     uploadBtn.disabled = true;
 
     for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      if (uploadStatus) uploadStatus.innerText = `Yükleniyor (${i + 1}/${files.length}): ${file.name}`;
+      let file = files[i];
+      if (uploadStatus) uploadStatus.innerText = `İşleniyor (${i + 1}/${files.length}): ${file.name}`;
 
       try {
-        // Benzersiz dosya adı üreterek Firebase Storage'a yükleme yapıyoruz (Zaman aşımı veya boyut limiti yok)
+        // --- 1. ADIM: EĞER FOTOĞRAFSA ARKA PLANDA JET HIZIYLA SIKIŞTIR ---
+        if (file.type.startsWith("image/")) {
+          if (uploadStatus) uploadStatus.innerText = `Fotoğraf sıkıştırılıyor...`;
+          file = await compressImage(file);
+        }
+
+        // --- 2. ADIM: FIREBASE STORAGE'A YÜKLE ---
+        if (uploadStatus) uploadStatus.innerText = `Yükleniyor (${i + 1}/${files.length})...`;
+        
         const uniqueFileName = `${Date.now()}_${file.name}`;
         const storageRef = ref(storage, `dugun_medya/${uniqueFileName}`);
 
-        // Binary yükleme performansı
         const snapshot = await uploadBytes(storageRef, file);
         const downloadUrl = await getDownloadURL(snapshot.ref);
 
-        // Linki Firestore'a kaydediyoruz
+        // --- 3. ADIM: FIRESTORE'A KAYDET ---
         await addDoc(collection(db, "photos"), {
           imageUrl: downloadUrl,
           mimeType: file.type,
@@ -68,7 +73,7 @@ if (uploadBtn && fileInput) {
 
       } catch (error) {
         console.error("Yükleme hatası:", error);
-        if (uploadStatus) uploadStatus.innerText = "Yükleme sırasında bir hata oluştu!";
+        if (uploadStatus) uploadStatus.innerText = "Bir dosya yüklenirken hata oluştu!";
       }
     }
 
@@ -86,7 +91,57 @@ if (uploadBtn && fileInput) {
 }
 
 // =========================================================
-// REALTIME CANLI GALERİ SİSTEMİ (Sayfa yenilemeden düşer)
+// Gelişmiş Fotoğraf Sıkıştırma Fonksiyonu (Hız Sırrımız Burada)
+// =========================================================
+function compressImage(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        // Maksimum genişlik/yükseklik sınırı (Mobil ekranlar için ideal premium kalite)
+        const MAX_WIDTH = 1600;
+        const MAX_HEIGHT = 1600;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH { height = MAX_HEIGHT; }
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // %75 kaliteye düşürerek boyutu MB'lardan KB'lara indiriyoruz (Gözle görülür kalite kaybı olmaz)
+        ctx.canvas.toBlob((blob) => {
+          const compressedFile = new File([blob], file.name, {
+            type: "image/jpeg",
+            lastModified: Date.now()
+          });
+          resolve(compressedFile);
+        }, "image/jpeg", 0.75);
+      };
+    };
+  });
+}
+
+// =========================================================
+// REALTIME CANLI GALERİ SİSTEMİ
 // =========================================================
 const q = query(collection(db, "photos"), orderBy("createdAt", "desc"));
 
@@ -113,7 +168,6 @@ onSnapshot(q, (snapshot) => {
     wrapper.className = "gallery-image-wrapper";
 
     if (media.type === "video") {
-      // Yerel tarayıcı video oynatıcısıyla tam uyumlu mini önizleme
       wrapper.innerHTML = `
         <video src="${media.url}" muted style="width:100%; height:100%; object-fit:cover; pointer-events:none;"></video>
         <div style="position:absolute; inset:0; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.15); color:#fff; font-size:24px;">▶</div>
@@ -136,20 +190,17 @@ onSnapshot(q, (snapshot) => {
 });
 
 // =========================================================
-// PREMIUM LIGHTBOX & SAĞA-SOLA KAYDIRMA (SWIPE) SİSTEMİ
+// LIGHTBOX & GEZİNEBİLİR KAYDIRMA (SWIPE) SİSTEMİ
 // =========================================================
 function openLightboxWithIndex(index) {
   if (!lightbox || !lightboxImage || !allMedia[index]) return;
   
   const media = allMedia[index];
-  
-  // Önceki video yapılarını sıfırla
   const existingVideo = lightbox.querySelector("video");
   if (existingVideo) existingVideo.remove();
   lightboxImage.style.display = "none";
 
   if (media.type === "video") {
-    // Büyük ekranda kusursuz oynatıcı entegrasyonu
     const videoElement = document.createElement("video");
     videoElement.src = media.url;
     videoElement.controls = true;
@@ -180,7 +231,7 @@ function prevMedia() {
   openLightboxWithIndex(currentMediaIndex);
 }
 
-// %100 Stabil Mobil Kaydırma Algoritması
+// Swipe Algılayıcı
 let touchStartX = 0;
 let touchEndX = 0;
 
@@ -201,7 +252,7 @@ function handleSwipe() {
   else if (touchEndX - touchStartX > swipeThreshold) prevMedia(); 
 }
 
-// Kapatma Yönetimi
+// Kapatma
 if (closeLightbox && lightbox) {
   const closeAll = () => {
     lightbox.style.display = "none";
@@ -213,7 +264,6 @@ if (closeLightbox && lightbox) {
   });
 }
 
-// Masaüstü testleri için klavye ok tuşları desteği
 document.addEventListener("keydown", (e) => {
   if (!lightbox || lightbox.style.display !== "flex") return;
   if (e.key === "ArrowRight") nextMedia();
