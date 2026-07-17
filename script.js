@@ -1,5 +1,5 @@
 /* =========================================================
-   SCRIPT.JS (Ultra Hızlı - Sıkıştırmalı Medya Motoru)
+   SCRIPT.JS (Hatasız - Sıkıştırmalı Ultra Hızlı Medya Motoru)
 ========================================================= */
 
 import { 
@@ -29,11 +29,13 @@ const closeLightbox = document.getElementById("closeLightbox");
 let allMedia = []; 
 let currentMediaIndex = 0;
 
-// Telefon kilitlenmelerini önlemek için kabul formatını en kararlı hale getiriyoruz
 if (fileInput) {
   fileInput.setAttribute("accept", "image/*,video/*");
 }
 
+// =========================================================
+// ULTRA HIZLI FIREBASE STORAGE YÜKLEME MOTORU
+// =========================================================
 if (uploadBtn && fileInput) {
   uploadBtn.addEventListener("click", () => fileInput.click());
 
@@ -49,13 +51,13 @@ if (uploadBtn && fileInput) {
       if (uploadStatus) uploadStatus.innerText = `İşleniyor (${i + 1}/${files.length}): ${file.name}`;
 
       try {
-        // --- 1. ADIM: EĞER FOTOĞRAFSA ARKA PLANDA JET HIZIYLA SIKIŞTIR ---
+        // 1. ADIM: EĞER FOTOĞRAFSA ARKA PLANDA JET HIZIYLA SIKIŞTIR
         if (file.type.startsWith("image/")) {
           if (uploadStatus) uploadStatus.innerText = `Fotoğraf sıkıştırılıyor...`;
           file = await compressImage(file);
         }
 
-        // --- 2. ADIM: FIREBASE STORAGE'A YÜKLE ---
+        // 2. ADIM: FIREBASE STORAGE'A YÜKLE
         if (uploadStatus) uploadStatus.innerText = `Yükleniyor (${i + 1}/${files.length})...`;
         
         const uniqueFileName = `${Date.now()}_${file.name}`;
@@ -64,7 +66,7 @@ if (uploadBtn && fileInput) {
         const snapshot = await uploadBytes(storageRef, file);
         const downloadUrl = await getDownloadURL(snapshot.ref);
 
-        // --- 3. ADIM: FIRESTORE'A KAYDET ---
+        // 3. ADIM: FIRESTORE'A KAYDET
         await addDoc(collection(db, "photos"), {
           imageUrl: downloadUrl,
           mimeType: file.type,
@@ -91,7 +93,7 @@ if (uploadBtn && fileInput) {
 }
 
 // =========================================================
-// Gelişmiş Fotoğraf Sıkıştırma Fonksiyonu (Hız Sırrımız Burada)
+// GÖRSEL SIKIŞTIRMA MOTORU (Hatasız & Kararlı)
 // =========================================================
 function compressImage(file) {
   return new Promise((resolve) => {
@@ -105,14 +107,13 @@ function compressImage(file) {
         let width = img.width;
         let height = img.height;
 
-        // Maksimum genişlik/yükseklik sınırı (Mobil ekranlar için ideal premium kalite)
-        const MAX_WIDTH = 1600;
-        const MAX_HEIGHT = 1600;
+        const MAX_WIDTH = 1200;
+        const MAX_HEIGHT = 1200;
 
         if (width > height) {
           if (width > MAX_WIDTH) {
             height *= MAX_WIDTH / width;
-            width = MAX_WIDTH { height = MAX_HEIGHT; }
+            width = MAX_WIDTH;
           }
         } else {
           if (height > MAX_HEIGHT) {
@@ -127,7 +128,6 @@ function compressImage(file) {
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, width, height);
 
-        // %75 kaliteye düşürerek boyutu MB'lardan KB'lara indiriyoruz (Gözle görülür kalite kaybı olmaz)
         ctx.canvas.toBlob((blob) => {
           const compressedFile = new File([blob], file.name, {
             type: "image/jpeg",
@@ -190,7 +190,7 @@ onSnapshot(q, (snapshot) => {
 });
 
 // =========================================================
-// LIGHTBOX & GEZİNEBİLİR KAYDIRMA (SWIPE) SİSTEMİ
+// PREMIUM LIGHTBOX & SAĞA-SOLA KAYDIRMA (SWIPE) SİSTEMİ
 // =========================================================
 function openLightboxWithIndex(index) {
   if (!lightbox || !lightboxImage || !allMedia[index]) return;
@@ -206,7 +206,7 @@ function openLightboxWithIndex(index) {
     videoElement.controls = true;
     videoElement.autoplay = true;
     videoElement.playsInline = true;
-    videoElement.style.maxWidth = "90%";
+    videoElement.style.maxWidth = "90%" ;
     videoElement.style.maxHeight = "80vh";
     videoElement.style.borderRadius = "12px";
     videoElement.style.border = "2px solid var(--gold-light)";
@@ -231,7 +231,7 @@ function prevMedia() {
   openLightboxWithIndex(currentMediaIndex);
 }
 
-// Swipe Algılayıcı
+// Mobil Kaydırma Algılayıcı
 let touchStartX = 0;
 let touchEndX = 0;
 
