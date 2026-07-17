@@ -3,7 +3,7 @@
 ========================================================= */
 
 // Aldığın Web Uygulaması URL'sini buraya tanımladık
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyBLUwfuhmCD5ZnVDtGYBN0aJ2xeumIKs4ah5ZxjS6syEmyRrIjWSZJeWNUH2QMkwyN/exec";
+https://script.google.com/macros/s/AKfycbxnYZ1X--qg83dUVd8Z53FOu72dBSg9_TmiNphrwE6LWzj4u1Tf65es5nFjUggMBjTMLw/exec
 
 // HTML'e gizli bir dosya seçici (input) ekliyoruz
 const fileInput = document.createElement("input");
