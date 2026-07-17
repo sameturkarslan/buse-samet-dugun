@@ -15,10 +15,9 @@ const lightboxImage = document.getElementById("lightboxImage");
 const closeLightbox = document.getElementById("closeLightbox");
 
 // Galeri Gezinme ve Dosya Tipi Hafızası
-let allMedia = []; // { url: "...", type: "image" veya "video" }
+let allMedia = []; 
 let currentMediaIndex = 0;
 
-// Tekrar hem fotoğraf hem video kabul edecek şekle getiriyoruz
 if (fileInput) {
   fileInput.setAttribute("accept", "image/*,video/*");
 }
@@ -72,7 +71,7 @@ if (uploadBtn && fileInput) {
     }, 3000);
     
     fileInput.value = ""; 
-    setTimeout(loadPhotos, 2000);
+    setTimeout(loadPhotos, 2500);
   });
 }
 
@@ -85,9 +84,14 @@ function toBase64(file) {
   });
 }
 
-// Dosya uzantısından veya mimeType'dan video olup olmadığını anlama
+// Güvenli video kontrolü
 function isVideoUrl(url) {
-  return url.includes(".mp4") || url.includes(".mov") || url.includes(".avi") || url.includes(".webm") || url.includes("video");
+  if (!url) return false;
+  return url.toLowerCase().includes(".mp4") || 
+         url.toLowerCase().includes(".mov") || 
+         url.toLowerCase().includes(".avi") || 
+         url.toLowerCase().includes(".webm") || 
+         url.toLowerCase().includes("drive.google.com/file/d/");
 }
 
 // Medyaları Çekme ve Ekrana Basma
@@ -102,39 +106,46 @@ async function loadPhotos() {
       galleryContainer.innerHTML = ""; 
       allMedia = []; 
       
-      data.documents.forEach((doc, index) => {
+      // Senkronizasyon hatasını önlemek için medyaları önce hafızaya alıyoruz
+      data.documents.forEach((doc) => {
         const fields = doc.fields;
-        
         if (fields && fields.imageUrl && fields.imageUrl.stringValue) {
-          const mediaUrl = fields.imageUrl.stringValue;
-          const isVideo = isVideoUrl(mediaUrl);
+          let mediaUrl = fields.imageUrl.stringValue;
           
-          allMedia.push({ url: mediaUrl, type: isVideo ? "video" : "image" });
-          
-          const wrapper = document.createElement("div");
-          wrapper.className = "gallery-image-wrapper";
-          
-          if (isVideo) {
-            // Eğer videoysa galeride önizleme olarak küçük bir video ve oynatma simgesi basıyoruz
-            wrapper.innerHTML = `
-              <video src="${mediaUrl}" muted style="width:100%; height:100%; object-fit:cover;"></video>
-              <div style="position:absolute; inset:0; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.2); color:#fff; font-size:20px;">▶</div>
-            `;
-          } else {
-            // Fotoğraf ise normal resim basıyoruz
-            const imgElement = document.createElement("img");
-            imgElement.src = mediaUrl;
-            imgElement.alt = "Düğün Anısı";
-            wrapper.appendChild(imgElement);
+          // Google Drive linki önizleme modundaysa doğrudan oynatılabilir video linkine çeviriyoruz
+          if (mediaUrl.includes("drive.google.com/file/d/")) {
+            mediaUrl = mediaUrl.replace("/view?usp=drivesdk", "").replace("/view", "") + "/preview";
           }
           
-          wrapper.addEventListener("click", () => {
-             currentMediaIndex = index;
-             openLightboxWithIndex(currentMediaIndex);
-          });
-
-          galleryContainer.appendChild(wrapper);
+          const isVideo = isVideoUrl(mediaUrl);
+          allMedia.push({ url: mediaUrl, type: isVideo ? "video" : "image" });
         }
+      });
+
+      // Hafızadaki medyaları ekrana basıyoruz
+      allMedia.forEach((media, index) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "gallery-image-wrapper";
+        
+        if (media.type === "video") {
+          wrapper.innerHTML = `
+            <iframe src="${media.url}" style="width:100%; height:100%; border:none; pointer-events:none;"></iframe>
+            <div style="position:absolute; inset:0; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.1); color:#fff; font-size:24px;">▶</div>
+          `;
+        } else {
+          const imgElement = document.createElement("img");
+          imgElement.src = media.url;
+          imgElement.alt = "Düğün Anısı";
+          wrapper.appendChild(imgElement);
+        }
+        
+        wrapper.addEventListener("click", (e) => {
+           e.stopPropagation();
+           currentMediaIndex = index;
+           openLightboxWithIndex(currentMediaIndex);
+        });
+
+        galleryContainer.appendChild(wrapper);
       });
     } else {
         galleryContainer.innerHTML = `<div class="loading">Henüz medya yüklenmedi. İlk paylaşımı siz yapın! ♥</div>`;
@@ -144,31 +155,29 @@ async function loadPhotos() {
   }
 }
 
-// Büyük Ekran Önizleme Sistemi (Hem video hem fotoğraf destekli)
+// Gelişmiş Büyük Ekran Önizleme Sistemi
 function openLightboxWithIndex(index) {
   if (!lightbox || !lightboxImage || !allMedia[index]) return;
   
   const media = allMedia[index];
   
-  // Önceki video kalıntılarını temizle
-  const existingVideo = lightbox.querySelector("video");
+  // Önceki video, iframe ve oynatıcıları temizle
+  const existingVideo = lightbox.querySelector("video, iframe");
   if (existingVideo) existingVideo.remove();
   lightboxImage.style.display = "none";
 
   if (media.type === "video") {
-    // Büyük ekranda video oynatıcı oluştur
-    const videoElement = document.createElement("video");
-    videoElement.src = media.url;
-    videoElement.controls = true;
-    videoElement.autoplay = true;
-    videoElement.style.maxWidth = "90%";
-    videoElement.style.maxHeight = "80vh";
-    videoElement.style.borderRadius = "12px";
-    videoElement.style.border = "2px solid var(--gold-light)";
+    // Google Drive videoları tarayıcıda doğrudan oynatılamayacağı için güvenli iframe yapısı kuruyoruz
+    const iframeElement = document.createElement("iframe");
+    iframeElement.src = media.url + (media.url.includes("?") ? "&autoplay=1" : "?autoplay=1");
+    iframeElement.style.width = "90%";
+    iframeElement.style.height = "70vh";
+    iframeElement.style.borderRadius = "12px";
+    iframeElement.style.border = "2px solid var(--gold-light)";
+    iframeElement.setAttribute("allow", "autoplay");
     
-    lightbox.appendChild(videoElement);
+    lightbox.appendChild(iframeElement);
   } else {
-    // Fotoğraf ise mevcut görsel alanını göster
     lightboxImage.src = media.url;
     lightboxImage.style.display = "block";
   }
@@ -176,7 +185,7 @@ function openLightboxWithIndex(index) {
   lightbox.style.display = "flex";
 }
 
-// Gezinme Fonksiyonları
+// Gezinme Fonksiyonları (Kaydırma Tetikleyicileri)
 function nextMedia() {
   if (allMedia.length === 0) return;
   currentMediaIndex = (currentMediaIndex + 1) % allMedia.length;
@@ -189,7 +198,9 @@ function prevMedia() {
   openLightboxWithIndex(currentMediaIndex);
 }
 
-// Swipe (Kaydırma) Algılayıcı
+// =========================================================
+// %100 KARARLI SWIPE (SAĞA-SOLA KAYDIRMA) SİSTEMİ
+// =========================================================
 let touchStartX = 0;
 let touchEndX = 0;
 
@@ -205,21 +216,24 @@ if (lightbox) {
 }
 
 function handleSwipe() {
-  const swipeThreshold = 50;
-  if (touchStartX - touchEndX > swipeThreshold) nextMedia();
-  else if (touchEndX - touchStartX > swipeThreshold) prevMedia();
+  const swipeThreshold = 40;
+  if (touchStartX - touchEndX > swipeThreshold) {
+    nextMedia(); 
+  } else if (touchEndX - touchStartX > swipeThreshold) {
+    prevMedia(); 
+  }
 }
 
-// Kapatma Mekanizması
+// Kapatma İşlemleri
 if (closeLightbox && lightbox) {
     closeLightbox.addEventListener("click", () => {
         lightbox.style.display = "none";
-        const v = lightbox.querySelector("video"); if(v) v.remove();
+        const v = lightbox.querySelector("video, iframe"); if(v) v.remove();
     });
     lightbox.addEventListener("click", (e) => {
         if (e.target === lightbox) {
           lightbox.style.display = "none";
-          const v = lightbox.querySelector("video"); if(v) v.remove();
+          const v = lightbox.querySelector("video, iframe"); if(v) v.remove();
         }
     });
 }
@@ -230,7 +244,7 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft") prevMedia();
   if (e.key === "Escape") {
     lightbox.style.display = "none";
-    const v = lightbox.querySelector("video"); if(v) v.remove();
+    const v = lightbox.querySelector("video, iframe"); if(v) v.remove();
   }
 });
 
