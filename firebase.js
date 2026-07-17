@@ -1,57 +1,34 @@
-// Firebase App (Temel SDK)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+// Firebase SDK modüllerini tarayıcı uyumlu sürümleriyle import ediyoruz
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-// Firestore SDK (Fotoğraf bilgilerini ve linklerini tutacak veritabanı)
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  onSnapshot,
-  query,
-  orderBy,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-// Storage SDK (Asıl fotoğraf dosyalarını yükleyeceğimiz alan - ChatGPT'nin unuttuğu kısım)
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
-
-/* ===========================================
-   FIREBASE CONFIG (Senin Bilgilerin)
-=========================================== */
+// Kendi Firebase projenin SDK Config bilgileri kanka (Firebase Console'dan alabilirsin)
 const firebaseConfig = {
-  apiKey: "AIzaSyDuNX14Q-a1Xgh-pNgyFd1OIInRI0Tnxi8",
-  authDomain: "buse-samet-dugun.firebaseapp.com",
-  projectId: "buse-samet-dugun",
-  storageBucket: "buse-samet-dugun.firebasestorage.app",
-  messagingSenderId: "516688924747",
-  appId: "1:516688924747:web:9597a254d4de392f95bdce"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
 };
 
-/* ===========================================
-   FIREBASE BAŞLATMA
-=========================================== */
+// Servisleri ayağa kaldırıyoruz
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app); // Storage başlatıldı
+const storage = getStorage(app);
 
-/* ===========================================
-   EXPORT (Diğer JS dosyalarında kullanabilmek için dışa aktarma)
-=========================================== */
-export {
-  db,
-  storage,
-  collection,
-  addDoc,
-  onSnapshot,
-  query,
-  orderBy,
-  serverTimestamp,
-  ref,
-  uploadBytes,
-  getDownloadURL
+// script.js dosyasının bu yetenekleri hatasız okuması için dışa aktarıyoruz
+export { 
+  db, 
+  storage, 
+  collection, 
+  addDoc, 
+  onSnapshot, 
+  query, 
+  orderBy, 
+  serverTimestamp, 
+  ref, 
+  uploadBytes, 
+  getDownloadURL 
 };
