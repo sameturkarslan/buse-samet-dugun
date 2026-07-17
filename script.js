@@ -70,3 +70,55 @@ function toBase64(file) {
     reader.onerror = (error) => reject(error);
   });
 }
+
+// =========================================================
+// FOTOĞRAFLARI FİREBASE'DEN ÇEKİP EKRANDA GÖSTERME KISMI
+// =========================================================
+
+const FIREBASE_PROJECT_ID = "buse-samet-dugun";
+
+// HTML'de fotoğrafların listeleneceği alanın id'sini buraya yazmalısın. 
+// Örneğin HTML'de <div id="gallery"></div> şeklinde bir alanın olmalı.
+const galleryContainer = document.getElementById("gallery"); 
+
+async function loadPhotos() {
+  if (!galleryContainer) return; // Eğer o sayfada galeri alanı yoksa hata vermemesi için
+
+  try {
+    // Firebase Firestore'dan verileri çekiyoruz
+    const response = await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/photos`);
+    const data = await response.json();
+
+    if (data.documents) {
+      galleryContainer.innerHTML = ""; // Yeni yüklemede önceki fotoğrafların üstüne eklememesi için temizliyoruz
+      
+      // Veritabanındaki her bir kayıt için döngü oluşturuyoruz
+      data.documents.forEach(doc => {
+        const fields = doc.fields;
+        
+        // Eğer kayıt İngilizce 'imageUrl' içeriyorsa ekrana bas (Eski Türkçe kayıtları es geçer)
+        if (fields && fields.imageUrl && fields.imageUrl.stringValue) {
+          const imgUrl = fields.imageUrl.stringValue;
+          
+          // Ekrana basılacak resmi (img) oluşturuyoruz
+          const imgElement = document.createElement("img");
+          imgElement.src = imgUrl;
+          
+          // Resmin stili (Bunu kendi CSS'ine veya tasarımına göre değiştirebilirsin)
+          imgElement.style.width = "300px"; 
+          imgElement.style.margin = "10px";
+          imgElement.style.borderRadius = "10px";
+          imgElement.style.objectFit = "cover";
+          
+          // Resmi HTML'deki galeri alanına ekliyoruz
+          galleryContainer.appendChild(imgElement);
+        }
+      });
+    }
+  } catch (error) {
+    console.error("Fotoğraflar yüklenirken hata oluştu:", error);
+  }
+}
+
+// Web sitesi açıldığında fotoğrafları otomatik olarak yükle
+window.onload = loadPhotos;
