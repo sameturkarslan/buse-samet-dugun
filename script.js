@@ -38,7 +38,6 @@ if (uploadBtn && fileInput) {
       try {
         let base64Data = "";
         
-        // Resimleri sıkıştır, videoları doğrudan oku
         if (file.type.startsWith("image/")) {
           if (uploadStatus) uploadStatus.innerText = `Fotoğraf optimize ediliyor...`;
           base64Data = await compressToDataURL(file);
@@ -49,21 +48,20 @@ if (uploadBtn && fileInput) {
 
         if (uploadStatus) uploadStatus.innerText = `Drive'a gönderiliyor...`;
 
-        // Apps Script'in çözebilmesi için ham Base64 string'i ayıklıyoruz
         const rawBase64 = base64Data.split(",")[1] || base64Data;
 
-        // Apps Script'e POST isteği yolluyoruz
+        const formData = new URLSearchParams();
+        formData.append("bytes", rawBase64);
+        formData.append("mimeType", file.type);
+        formData.append("filename", `${Date.now()}_${file.name}`);
+
         await fetch(APPS_SCRIPT_URL, {
           method: "POST",
-          mode: "no-cors", 
+          mode: "no-cors",
           headers: {
-            "Content-Type": "text/plain"
+            "Content-Type": "application/x-www-form-urlencoded"
           },
-          body: JSON.stringify({
-            bytes: rawBase64,
-            mimeType: file.type,
-            filename: `${Date.now()}_${file.name}`
-          })
+          body: formData.toString()
         });
 
       } catch (error) {
@@ -74,38 +72,48 @@ if (uploadBtn && fileInput) {
     uploadBtn.innerText = "YÜKLEME TAMAMLANDI!";
     if (uploadStatus) uploadStatus.innerText = "Anınız başarıyla eklendi! ♥";
     
-    // Yükleme bitince galeriyi yenilemek için kısa bir gecikme veriyoruz
     setTimeout(() => {
       fetchGallery();
       uploadBtn.innerHTML = `<svg class="camera-icon" viewBox="0 0 24 24" width="20" height="20" style="fill:var(--gold-dark); margin-right:10px;"><path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg> FOTOĞRAF / VİDEO YÜKLE`;
       uploadBtn.disabled = false;
       if (uploadStatus) uploadStatus.innerText = "";
-    }, 3000);
+    }, 3500);
 
     fileInput.value = ""; 
   });
 }
 
-// Drive'dan verileri çeken ana motor (CORS engelleri aşılmış tekil fonksiyon)
-async function fetchGallery() {
+// CORS ENGELİNİ JSONP İLE AŞAN EFSANE GALERİ MOTORU
+function fetchGallery() {
   if (!galleryContainer) return;
   
-  try {
-    const response = await fetch(APPS_SCRIPT_URL, {
-      method: "GET",
-      redirect: "follow"
-    });
-    
-    const result = await response.json();
-    
-    if (result.status === "success") {
+  // Benzersiz bir callback fonksiyon ismi üretiyoruz
+  const callbackName = "jsonp_callback_" + Math.round(100000 * Math.random());
+  
+  // Küresel alanda (window) bu fonksiyonu tanımlıyoruz ki Apps Script çalıştırabilsin
+  window[callbackName] = function(result) {
+    if (result && result.status === "success") {
       allMedia = result.data;
       renderGallery();
+    } else {
+      galleryContainer.innerHTML = `<div class="loading">Henüz fotoğraf veya video yüklenmedi. İlk siz yükleyin! ♥</div>`;
     }
-  } catch (error) {
-    console.error("Galeri yükleme hatası:", error);
-    galleryContainer.innerHTML = `<div class="loading">Medyalar yüklenirken bir ağ veya izin kısıtlaması oluştu.</div>`;
-  }
+    // İşimiz bitince script etiketini ve geçici fonksiyonu hafızadan temizliyoruz
+    delete window[callbackName];
+    document.getElementById(callbackName)?.remove();
+  };
+
+  // HTML'e dinamik olarak <script> basarak CORS'u tamamen baypas ediyoruz
+  const script = document.createElement("script");
+  script.id = callbackName;
+  script.src = APPS_SCRIPT_URL + "?callback=" + callbackName;
+  
+  script.onerror = function() {
+    console.error("JSONP yükleme hatası oluştu.");
+    galleryContainer.innerHTML = `<div class="loading">Henüz fotoğraf veya video yüklenmedi. İlk siz yükleyin! ♥</div>`;
+  };
+
+  document.body.appendChild(script);
 }
 
 function renderGallery() {
@@ -119,8 +127,7 @@ function renderGallery() {
   allMedia.forEach((media, index) => {
     const wrapper = document.createElement("div");
     wrapper.className = "gallery-image-wrapper";
-
-    const isVideo = media.mimeType.startsWith("video/");
+    const isVideo = media.mimeType ? media.mimeType.startsWith("video/") : false;
 
     if (isVideo) {
       wrapper.innerHTML = `
@@ -151,7 +158,7 @@ function openLightboxWithIndex(index) {
   const container = document.getElementById("lightboxContent");
   container.innerHTML = ""; 
 
-  const isVideo = media.mimeType.startsWith("video/");
+  const isVideo = media.mimeType ? media.mimeType.startsWith("video/") : false;
 
   if (isVideo) {
     const videoElement = document.createElement("video");
@@ -182,7 +189,6 @@ function readFileAsDataURL(file) {
   });
 }
 
-// Resim sıkıştırma fonksiyonu
 function compressToDataURL(file) {
   return new Promise((resolve) => {
     const reader = new FileReader();
@@ -195,10 +201,8 @@ function compressToDataURL(file) {
         let width = img.width;
         let height = img.height;
         const MAX = 1000;
-
         if (width > height && width > MAX) { height *= MAX / width; width = MAX; }
         else if (height > width && height > MAX) { width *= MAX / height; height = MAX; }
-
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext("2d");
@@ -215,7 +219,6 @@ function nextMedia() {
   openLightboxWithIndex(currentMediaIndex);
 }
 
-// Geriye doğru medya değiştirme
 function prevMedia() {
   if (allMedia.length === 0) return;
   currentMediaIndex = (currentMediaIndex - 1 + allMedia.length) % allMedia.length;
@@ -225,7 +228,6 @@ function prevMedia() {
 if (prevBtn) prevBtn.addEventListener("click", (e) => { e.stopPropagation(); prevMedia(); });
 if (nextBtn) nextBtn.addEventListener("click", (e) => { e.stopPropagation(); nextMedia(); });
 
-// Swipe Desteği
 let touchStartX = 0; let touchEndX = 0;
 if (lightbox) {
   lightbox.addEventListener("touchstart", (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
