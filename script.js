@@ -1,5 +1,5 @@
 // Google Apps Script Web Uygulaması URL'si
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7f4Q_m0zwaAhxDbH8LE8KmYx1X2LcgQs15AKJW7AJo37rT3iJjQwfq8bkQZUcsAtZ/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwMbJXFXztpemKsDrqTae74LzGBw2JsO3ChzGCm1CSKJ95bRB_AvB9BR6aSHUZNiifw/exec";
 
 const uploadBtn = document.getElementById("uploadBtn");
 const fileInput = document.getElementById("hiddenFileInput");
@@ -49,12 +49,12 @@ if (uploadBtn && fileInput) {
         if (uploadStatus) uploadStatus.innerText = Drive'a gönderiliyor...;
         const rawBase64 = base64Data.split(",")[1] || base64Data;
 
-        // KARAKTER SINIRINA TAKILMAYAN GÜVENLİ POST FETCH METODU
-        const response = await fetch(APPS_SCRIPT_URL, {
+        // İLK GÜNKÜ GİBİ GÜVENLİ VE SINIRSIZ POST YÖNTEMİ
+        await fetch(APPS_SCRIPT_URL, {
           method: "POST",
-          mode: "cors", // Apps Script tarafında doOptions yazdığımız için artık cors açabiliriz
+          mode: "no-cors", 
           headers: {
-            "Content-Type": "text/plain" // Apps Script'in rahat okuması için düz metin olarak json gönderiyoruz
+            "Content-Type": "text/plain"
           },
           body: JSON.stringify({
             bytes: rawBase64,
@@ -62,9 +62,6 @@ if (uploadBtn && fileInput) {
             filename: ${Date.now()}_${file.name}
           })
         });
-
-        const result = await response.json();
-        console.log("Yükleme sonucu:", result);
 
       } catch (error) {
         console.error("Yükleme hatası:", error);
@@ -74,6 +71,7 @@ if (uploadBtn && fileInput) {
     uploadBtn.innerText = "YÜKLEME TAMAMLANDI!";
     if (uploadStatus) uploadStatus.innerText = "Anınız başarıyla eklendi! ♥️";
     
+    // Yükleme bitince galeriyi yenilemek için kısa bir gecikme veriyoruz
     setTimeout(() => {
       fetchGallery();
       uploadBtn.innerHTML = <svg class="camera-icon" viewBox="0 0 24 24" width="20" height="20" style="fill:var(--gold-dark); margin-right:10px;"><path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg> FOTOĞRAF / VİDEO YÜKLE;
@@ -85,25 +83,28 @@ if (uploadBtn && fileInput) {
   });
 }
 
-// Güvenli Galeri Çekme Motoru
+// Drive'dan verileri çeken ana motor
 async function fetchGallery() {
   if (!galleryContainer) return;
   
   try {
     const response = await fetch(APPS_SCRIPT_URL, {
       method: "GET",
-      mode: "cors"
+      mode: "no-cors" // Eski çalışan sistemdeki gibi sessizce çekim yapmayı dener
     });
     
+    // Eğer tarayıcı GET isteğine katı davranırsa diye sessizce arkada json çözüyoruz
     const result = await response.json();
-    
-    if (result.status === "success") {
+    if (result && result.status === "success") {
       allMedia = result.data;
       renderGallery();
     }
   } catch (error) {
     console.error("Galeri yükleme hatası:", error);
-    galleryContainer.innerHTML = <div class="loading">Henüz fotoğraf veya video yüklenmedi. İlk siz yükleyin! ♥️</div>;
+    // Burası boş kalmasın diye kullanıcıya yükleme alanını gösteriyoruz
+    if(allMedia.length === 0) {
+      galleryContainer.innerHTML = <div class="loading">Henüz fotoğraf veya video yüklenmedi. İlk siz yükleyin! ♥️</div>;
+    }
   }
 }
 
