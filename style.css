@@ -1,81 +1,323 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buse & Samet - Düğün Anıları</title>
-    <!-- Google Fonts entegrasyonu düzeltildi -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css"> 
-</head>
-<body>
+/* =========================================================
+   BUSE & SAMET - LUXURY WEDDING THEME 
+========================================================= */
 
-    <!-- Arka plandaki zarif yaprak görselleri için dekoratif elementler -->
-    <div class="leaf-deco top-left"></div>
-    <div class="leaf-deco top-right"></div>
+:root {
+    --bg-creme: #f5eedc;       
+    --card-bg: #fdfbf7;        
+    --gold-light: #e6cb95;     
+    --gold-text: #bd9a5f;      
+    --gold-dark: #a37f43;      
+    --text-dark: #4a3e2e;      
+    --text-muted: #8c7b64;     
+}
 
-    <div class="wedding-container">
-        <!-- Minimalist Yuvarlak Menü Butonu -->
-        <div class="menu-btn">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        <header class="hero">
-            <div class="heart-divider">♥</div>
-            <h1 class="names">BUSE <span class="amp">&</span> SAMET</h1>
-            <div class="date-section">
-                <span class="line"></span>
-                <span class="date">19 EYLÜL 2026</span>
-                <span class="line"></span>
-            </div>
-            <p class="welcome-text">Mutluluğumuza ortak olduğunuz için teşekkür ederiz.</p>
-            <div class="heart-divider">♥</div>
-        </header>
+body {
+    background-color: var(--bg-creme);
+    background-image: radial-gradient(circle at top, #fffdf9 0%, var(--bg-creme) 100%);
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-dark);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
 
-        <section class="upload-section">
-            <input type="file" id="hiddenFileInput" accept="image/*,video/*" multiple style="display: none;">
-            <!-- Altın parıltılı premium buton -->
-            <button id="uploadBtn" class="premium-upload-btn">
-                <svg class="camera-icon" viewBox="0 0 24 24" width="22" height="22">
-                    <path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/>
-                </svg>
-                FOTOĞRAF YÜKLE
-            </button>
-            <p class="security-note"><span class="shield-icon">🛡️</span> Fotoğraflarınız güvende ♥</p>
-            <p id="uploadStatus"></p>
-        </section>
+.wedding-container {
+    width: 100%;
+    max-width: 450px; 
+    background: var(--card-bg);
+    min-height: 100vh;
+    position: relative;
+    padding: 60px 24px 40px;
+    box-shadow: 0 0 40px rgba(74, 62, 46, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-        <section class="gallery-section">
-            <h2 class="gallery-title">ANILARIMIZ</h2>
-            <div class="gallery-deco">
-                <span class="deco-line"></span>
-                <span class="deco-heart">♥</span>
-                <span class="deco-line"></span>
-            </div>
-            <div id="photoGallery" class="gallery-grid">
-                <div class="loading">Medyalar yükleniyor...</div>
-            </div>
-        </section>
+/* Sol ve Sağ Üst Köşelerdeki Yaprak Desenleri */
+.wedding-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120px;
+    height: 200px;
+    background: url('https://i.ibb.co/tPpz4M0/leaves-left.png') no-repeat left top;
+    background-size: contain;
+    opacity: 0.25;
+    pointer-events: none;
+}
 
-        <footer class="footer">
-            <div class="heart-divider">♥</div>
-            <p class="footer-note">Bu özel günümüzde çektiğiniz fotoğrafları bizimle paylaşmanız bizi çok mutlu eder.</p>
-            <div class="heart-divider">♥</div>
-        </footer>
-    </div>
+/* Menü Butonu (Sağ Üst Yuvarlak Üç Çizgi) */
+.menu-btn {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    width: 45px;
+    height: 45px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    cursor: pointer;
+    z-index: 10;
+    border: 1px solid rgba(230, 203, 149, 0.3);
+}
 
-    <!-- LIGHTBOX (Gelişmiş Önizleme Navigasyonu) -->
-    <div id="lightbox">
-        <span id="closeLightbox">&times;</span>
-        <span id="prevBtn" class="nav-btn">&#10094;</span>
-        <div id="lightboxContent"></div>
-        <span id="nextBtn" class="nav-btn">&#10095;</span>
-    </div>
+.menu-btn span {
+    width: 20px;
+    height: 2px;
+    background: var(--gold-text);
+    border-radius: 2px;
+}
 
-    <script src="script.js"></script>
-</body>
-</html>
+.hero {
+    text-align: center;
+    margin-bottom: 35px;
+    z-index: 2;
+    width: 100%;
+}
+
+.heart-divider {
+    color: var(--gold-text);
+    font-size: 14px;
+    margin: 12px 0;
+    opacity: 0.9;
+}
+
+.names {
+    font-family: 'Cormorant Garish', serif;
+    font-size: 52px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    line-height: 1.1;
+    color: var(--gold-text);
+    text-transform: uppercase;
+    margin: 10px 0;
+}
+
+.names span {
+    display: block;
+    font-size: 32px;
+    margin: 2px 0;
+    color: var(--gold-light);
+}
+
+.date-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.date-section .line {
+    width: 50px;
+    height: 1px;
+    background: var(--gold-light);
+}
+
+.date-section .date {
+    font-size: 14px;
+    letter-spacing: 3px;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.welcome-text {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text-muted);
+    max-width: 300px;
+    margin: 0 auto;
+    font-weight: 400;
+}
+
+/* PREMIUM OVAL BUTON ALANI */
+.upload-section {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+    z-index: 2;
+}
+
+.premium-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 320px;
+    padding: 18px 30px;
+    background: #ffffff;
+    border: 2px solid var(--gold-light);
+    border-radius: 40px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    color: var(--gold-text);
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(230, 203, 149, 0.35), inset 0 0 10px rgba(230, 203, 149, 0.1);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    outline: none;
+}
+
+.premium-upload-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(230, 203, 149, 0.45);
+}
+
+.camera-icon {
+    fill: var(--gold-text);
+}
+
+.security-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 15px;
+}
+
+#uploadStatus {
+    font-size: 12px;
+    color: var(--gold-dark);
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+/* ANILARIMIZ GALERİ ALANI */
+.gallery-section {
+    width: 100%;
+    z-index: 2;
+}
+
+.gallery-title {
+    font-family: 'Cormorant Garish', serif;
+    font-size: 26px;
+    letter-spacing: 4px;
+    text-align: center;
+    color: var(--text-dark);
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.gallery-deco {
+    font-size: 12px;
+    color: var(--gold-text);
+    text-align: center;
+    margin: 4px 0 25px;
+    background: url('https://i.ibb.co/3W6qWbX/deco-line.png') no-repeat center;
+    background-size: contain;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.gallery-grid .gallery-image-wrapper {
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f2ede2;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    position: relative;
+    cursor: pointer;
+    border: 1px solid rgba(230, 203, 149, 0.25);
+    transition: transform 0.3s ease;
+}
+
+.gallery-grid img, .gallery-grid video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.loading {
+    grid-column: 1 / -1;
+    padding: 40px;
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+    font-style: italic;
+}
+
+/* LIGHTBOX ÖNİZLEME MODALI */
+#lightbox {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(22, 20, 18, 0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 9999;
+    padding: 20px;
+}
+
+#lightboxContent img, #lightboxContent video {
+    max-width: 90vw;
+    max-height: 75vh;
+    border-radius: 16px;
+    border: 2px solid var(--gold-light);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+}
+
+#closeLightbox {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    font-size: 45px;
+    color: #ffffff;
+    cursor: pointer;
+    z-index: 10002;
+    opacity: 0.8;
+}
+
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold-light);
+    font-size: 40px;
+    padding: 15px;
+    cursor: pointer;
+    z-index: 10005;
+    opacity: 0.7;
+}
+
+#prevBtn { left: 10px; }
+#nextBtn { right: 10px; }
+
+.footer {
+    width: 100%;
+    text-align: center;
+    margin-top: auto;
+    padding-top: 30px;
+    border-top: 1px solid rgba(230, 203, 149, 0.25);
+    z-index: 2;
+}
+
+.footer-note {
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--text-muted);
+    max-width: 300px;
+    margin: 0 auto;
+}
