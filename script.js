@@ -1,5 +1,5 @@
 // Google Apps Script Web Uygulaması URL'si
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwMbJXFXztpemKsDrqTae74LzGBw2JsO3ChzGCm1CSKJ95bRB_AvB9BR6aSHUZNiifw/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7f4Q_m0zwaAhxDbH8LE8KmYx1X2LcgQs15AKJW7AJo37rT3iJjQwfq8bkQZUcsAtZ/exec";
 
 const uploadBtn = document.getElementById("uploadBtn");
 const fileInput = document.getElementById("hiddenFileInput");
@@ -18,7 +18,7 @@ let currentMediaIndex = 0;
 window.addEventListener("DOMContentLoaded", fetchGallery);
 
 if (fileInput) {
-  fileInput.setAttribute("accept", "image/*,video/*");
+  fileInput.setAttribute("accept", "image/,video/");
 }
 
 if (uploadBtn && fileInput) {
@@ -33,25 +33,38 @@ if (uploadBtn && fileInput) {
 
     for (let i = 0; i < files.length; i++) {
       let file = files[i];
-      if (uploadStatus) uploadStatus.innerText = `İşleniyor (${i + 1}/${files.length})...`;
+      if (uploadStatus) uploadStatus.innerText = İşleniyor (${i + 1}/${files.length})...;
 
       try {
         let base64Data = "";
         
-        // Resimleri sıkıştır, videoları doğrudan oku
         if (file.type.startsWith("image/")) {
-          if (uploadStatus) uploadStatus.innerText = `Fotoğraf optimize ediliyor...`;
+          if (uploadStatus) uploadStatus.innerText = Fotoğraf optimize ediliyor...;
           base64Data = await compressToDataURL(file);
         } else {
-          if (uploadStatus) uploadStatus.innerText = `Video hazırlanıyor...`;
+          if (uploadStatus) uploadStatus.innerText = Video hazırlanıyor...;
           base64Data = await readFileAsDataURL(file);
         }
 
-        if (uploadStatus) uploadStatus.innerText = `Drive'a gönderiliyor...`;
+        if (uploadStatus) uploadStatus.innerText = Drive'a gönderiliyor...;
         const rawBase64 = base64Data.split(",")[1] || base64Data;
 
-        // %100 ÇALIŞAN TARAYICI ENGELSİZ JSONP YÜKLEME SİSTEMİ
-        await sendDataViaJSONP(rawBase64, file.type, `${Date.now()}_${file.name}`);
+        // KARAKTER SINIRINA TAKILMAYAN GÜVENLİ POST FETCH METODU
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          mode: "cors", // Apps Script tarafında doOptions yazdığımız için artık cors açabiliriz
+          headers: {
+            "Content-Type": "text/plain" // Apps Script'in rahat okuması için düz metin olarak json gönderiyoruz
+          },
+          body: JSON.stringify({
+            bytes: rawBase64,
+            mimeType: file.type,
+            filename: ${Date.now()}_${file.name}
+          })
+        });
+
+        const result = await response.json();
+        console.log("Yükleme sonucu:", result);
 
       } catch (error) {
         console.error("Yükleme hatası:", error);
@@ -59,12 +72,11 @@ if (uploadBtn && fileInput) {
     }
 
     uploadBtn.innerText = "YÜKLEME TAMAMLANDI!";
-    if (uploadStatus) uploadStatus.innerText = "Anınız başarıyla eklendi! ♥";
+    if (uploadStatus) uploadStatus.innerText = "Anınız başarıyla eklendi! ♥️";
     
-    // Drive'ın dosyayı işlemesi ve kendine gelmesi için kısa bir süre bekleyip galeriyi yeniliyoruz
     setTimeout(() => {
       fetchGallery();
-      uploadBtn.innerHTML = `<svg class="camera-icon" viewBox="0 0 24 24" width="20" height="20" style="fill:var(--gold-dark); margin-right:10px;"><path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg> FOTOĞRAF / VİDEO YÜKLE`;
+      uploadBtn.innerHTML = <svg class="camera-icon" viewBox="0 0 24 24" width="20" height="20" style="fill:var(--gold-dark); margin-right:10px;"><path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg> FOTOĞRAF / VİDEO YÜKLE;
       uploadBtn.disabled = false;
       if (uploadStatus) uploadStatus.innerText = "";
     }, 3500);
@@ -73,66 +85,33 @@ if (uploadBtn && fileInput) {
   });
 }
 
-// JSONP ile Güvenli Yükleme Fonksiyonu
-function sendDataViaJSONP(bytes, mimeType, filename) {
-  return new Promise((resolve) => {
-    const callbackName = "upload_callback_" + Math.round(100000 * Math.random());
-    
-    window[callbackName] = function(response) {
-      resolve(response);
-      delete window[callbackName];
-      document.getElementById(callbackName)?.remove();
-    };
-
-    const script = document.createElement("script");
-    script.id = callbackName;
-    
-    // Parametreleri GET URL'sine ekleyerek tarayıcı kısıtlamalarını baypas ediyoruz
-    script.src = `${APPS_SCRIPT_URL}?action=upload&bytes=${encodeURIComponent(bytes)}&mimeType=${encodeURIComponent(mimeType)}&filename=${encodeURIComponent(filename)}&callback=${callbackName}`;
-    
-    script.onerror = function() {
-      resolve({ status: "error" });
-      delete window[callbackName];
-      document.getElementById(callbackName)?.remove();
-    };
-
-    document.body.appendChild(script);
-  });
-}
-
-// JSONP ile Güvenli Galeri Çekme Motoru
-function fetchGallery() {
+// Güvenli Galeri Çekme Motoru
+async function fetchGallery() {
   if (!galleryContainer) return;
   
-  const callbackName = "gallery_callback_" + Math.round(100000 * Math.random());
-  
-  window[callbackName] = function(result) {
-    if (result && result.status === "success") {
+  try {
+    const response = await fetch(APPS_SCRIPT_URL, {
+      method: "GET",
+      mode: "cors"
+    });
+    
+    const result = await response.json();
+    
+    if (result.status === "success") {
       allMedia = result.data;
       renderGallery();
-    } else {
-      galleryContainer.innerHTML = `<div class="loading">Henüz fotoğraf veya video yüklenmedi. İlk siz yükleyin! ♥</div>`;
     }
-    delete window[callbackName];
-    document.getElementById(callbackName)?.remove();
-  };
-
-  const script = document.createElement("script");
-  script.id = callbackName;
-  script.src = APPS_SCRIPT_URL + "?callback=" + callbackName;
-  
-  script.onerror = function() {
-    galleryContainer.innerHTML = `<div class="loading">Henüz fotoğraf veya video yüklenmedi. İlk siz yükleyin! ♥</div>`;
-  };
-
-  document.body.appendChild(script);
+  } catch (error) {
+    console.error("Galeri yükleme hatası:", error);
+    galleryContainer.innerHTML = <div class="loading">Henüz fotoğraf veya video yüklenmedi. İlk siz yükleyin! ♥️</div>;
+  }
 }
 
 function renderGallery() {
   galleryContainer.innerHTML = "";
 
   if (allMedia.length === 0) {
-    galleryContainer.innerHTML = `<div class="loading">Henüz fotoğraf veya video yüklenmedi. İlk siz yükleyin! ♥</div>`;
+    galleryContainer.innerHTML = <div class="loading">Henüz fotoğraf veya video yüklenmedi. İlk siz yükleyin! ♥️</div>;
     return;
   }
 
@@ -144,7 +123,7 @@ function renderGallery() {
     if (isVideo) {
       wrapper.innerHTML = `
         <video src="${media.embedUrl}" muted playsinline style="width:100%; height:100%; object-fit:cover; pointer-events:none;"></video>
-        <div style="position:absolute; inset:0; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.15); color:#fff; font-size:24px;">▶</div>
+        <div style="position:absolute; inset:0; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.15); color:#fff; font-size:24px;">▶️</div>
       `;
     } else {
       const img = document.createElement("img");
