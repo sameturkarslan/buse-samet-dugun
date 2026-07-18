@@ -1,37 +1,81 @@
-/* =========================================================
-   LIGHTBOX PREMIUM NAVİGASYON EKLEMELERİ
-========================================================= */
-#lightboxContent {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    max-width: 85%;
-}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buse & Samet - Düğün Anıları</title>
+    <!-- Google Fonts entegrasyonu düzeltildi -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
 
-.nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    color: rgba(226, 203, 153, 0.8);
-    font-size: 35px;
-    font-weight: bold;
-    padding: 10px;
-    cursor: pointer;
-    user-select: none;
-    transition: color 0.2s ease;
-    z-index: 10005;
-}
+    <!-- Arka plandaki zarif yaprak görselleri için dekoratif elementler -->
+    <div class="leaf-deco top-left"></div>
+    <div class="leaf-deco top-right"></div>
 
-.nav-btn:hover {
-    color: var(--gold-light);
-}
+    <div class="wedding-container">
+        <!-- Minimalist Yuvarlak Menü Butonu -->
+        <div class="menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
 
-#prevBtn { left: 10px; }
-#nextBtn { right: 10px; }
+        <header class="hero">
+            <div class="heart-divider">♥</div>
+            <h1 class="names">BUSE <span class="amp">&</span> SAMET</h1>
+            <div class="date-section">
+                <span class="line"></span>
+                <span class="date">19 EYLÜL 2026</span>
+                <span class="line"></span>
+            </div>
+            <p class="welcome-text">Mutluluğumuza ortak olduğunuz için teşekkür ederiz.</p>
+            <div class="heart-divider">♥</div>
+        </header>
 
-@media (max-width: 480px) {
-    .nav-btn { font-size: 28px; padding: 5px; }
-    #prevBtn { left: 2px; }
-    #nextBtn { right: 2px; }
-}
+        <section class="upload-section">
+            <input type="file" id="hiddenFileInput" accept="image/*,video/*" multiple style="display: none;">
+            <!-- Altın parıltılı premium buton -->
+            <button id="uploadBtn" class="premium-upload-btn">
+                <svg class="camera-icon" viewBox="0 0 24 24" width="22" height="22">
+                    <path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/>
+                </svg>
+                FOTOĞRAF YÜKLE
+            </button>
+            <p class="security-note"><span class="shield-icon">🛡️</span> Fotoğraflarınız güvende ♥</p>
+            <p id="uploadStatus"></p>
+        </section>
+
+        <section class="gallery-section">
+            <h2 class="gallery-title">ANILARIMIZ</h2>
+            <div class="gallery-deco">
+                <span class="deco-line"></span>
+                <span class="deco-heart">♥</span>
+                <span class="deco-line"></span>
+            </div>
+            <div id="photoGallery" class="gallery-grid">
+                <div class="loading">Medyalar yükleniyor...</div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="heart-divider">♥</div>
+            <p class="footer-note">Bu özel günümüzde çektiğiniz fotoğrafları bizimle paylaşmanız bizi çok mutlu eder.</p>
+            <div class="heart-divider">♥</div>
+        </footer>
+    </div>
+
+    <!-- LIGHTBOX (Gelişmiş Önizleme Navigasyonu) -->
+    <div id="lightbox">
+        <span id="closeLightbox">&times;</span>
+        <span id="prevBtn" class="nav-btn">&#10094;</span>
+        <div id="lightboxContent"></div>
+        <span id="nextBtn" class="nav-btn">&#10095;</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
