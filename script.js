@@ -1,20 +1,5 @@
-/* =========================================================
-   SCRIPT.JS (Ultra Hızlı - Base64 uploadString Motoru)
-========================================================= */
-
-import { 
-  db, 
-  storage, 
-  collection, 
-  addDoc, 
-  onSnapshot, 
-  query, 
-  orderBy, 
-  serverTimestamp, 
-  ref, 
-  getDownloadURL,
-  uploadString // Yeni nesil hızlı yükleme modülü
-} from "./firebase.js";
+// Az önce oluşturduğun Google Apps Script Web Uygulaması URL'si
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7f4Q_m0zwaAhxDbH8LE8KmYx1X2LcgQs15AKJW7AJo37rT3iJjQwfq8bkQZUcsAtZ/exec";
 
 const uploadBtn = document.getElementById("uploadBtn");
 const fileInput = document.getElementById("hiddenFileInput");
@@ -23,17 +8,19 @@ const galleryContainer = document.getElementById("photoGallery");
 const lightbox = document.getElementById("lightbox");
 const lightboxImage = document.getElementById("lightboxImage");
 const closeLightbox = document.getElementById("closeLightbox");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
 
 let allMedia = []; 
 let currentMediaIndex = 0;
+
+// Sayfa ilk açıldığında Drive'daki mevcut tüm medyaları getir
+window.addEventListener("DOMContentLoaded", fetchGallery);
 
 if (fileInput) {
   fileInput.setAttribute("accept", "image/*,video/*");
 }
 
-// =========================================================
-// ULTRA HIZLI YÜKLEME MOTORU
-// =========================================================
 if (uploadBtn && fileInput) {
   uploadBtn.addEventListener("click", () => fileInput.click());
 
@@ -49,34 +36,31 @@ if (uploadBtn && fileInput) {
       if (uploadStatus) uploadStatus.innerText = `İşleniyor (${i + 1}/${files.length})...`;
 
       try {
-        const uniqueFileName = `${Date.now()}_${file.name}`;
-        const storageRef = ref(storage, `dugun_medya/${uniqueFileName}`);
-        let downloadUrl = "";
-
-        // FOTOĞRAF İSE: JET HIZIYLA BASE64 SIKIŞTIR VE STRING OLARAK UÇUR
+        let base64Data = "";
+        
+        // Resimleri sıkıştır, videoları doğrudan oku
         if (file.type.startsWith("image/")) {
           if (uploadStatus) uploadStatus.innerText = `Fotoğraf optimize ediliyor...`;
-          const base64Data = await compressToDataURL(file);
-          
-          if (uploadStatus) uploadStatus.innerText = `Yükleniyor...`;
-          const snapshot = await uploadString(storageRef, base64Data, 'data_url');
-          downloadUrl = await getDownloadURL(snapshot.ref);
-        } 
-        // VİDEO İSE: ORİJİNAL HALİYLE FIRLAT
-        else {
-          if (uploadStatus) uploadStatus.innerText = `Video yükleniyor (Büyük dosya)...`;
-          // Firebase storage importlarında uploadBytes kullandığımız için videoları doğrudan atabiliriz
-          const { uploadBytes } = await import("./firebase.js");
-          const snapshot = await uploadBytes(storageRef, file);
-          downloadUrl = await getDownloadURL(snapshot.ref);
+          base64Data = await compressToDataURL(file);
+        } else {
+          if (uploadStatus) uploadStatus.innerText = `Video hazırlanıyor...`;
+          base64Data = await readFileAsDataURL(file);
         }
 
-        // FIRESTORE YAZIMI
-        await addDoc(collection(db, "photos"), {
-          imageUrl: downloadUrl,
-          mimeType: file.type,
-          createdAt: serverTimestamp()
+        if (uploadStatus) uploadStatus.innerText = `Drive'a gönderiliyor...`;
+
+        // Apps Script'e POST isteği yolluyoruz
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            bytes: base64Data,
+            mimeType: file.type,
+            filename: `${Date.now()}_${file.name}`
+          })
         });
+
+        const result = await response.json();
+        if (result.status !== "success") throw new Error(result.message);
 
       } catch (error) {
         console.error("Yükleme hatası:", error);
@@ -87,6 +71,9 @@ if (uploadBtn && fileInput) {
     uploadBtn.innerText = "YÜKLEME TAMAMLANDI!";
     if (uploadStatus) uploadStatus.innerText = "Anınız başarıyla eklendi! ♥";
     
+    // Yükleme bitince galeriyi anında güncelle
+    fetchGallery();
+
     setTimeout(() => {
       uploadBtn.innerHTML = `<svg class="camera-icon" viewBox="0 0 24 24" width="20" height="20" style="fill:var(--gold-dark); margin-right:10px;"><path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg> FOTOĞRAF / VİDEO YÜKLE`;
       uploadBtn.disabled = false;
@@ -97,63 +84,26 @@ if (uploadBtn && fileInput) {
   });
 }
 
-// =========================================================
-// ULTRA HIZLI DATAURL SIKIŞTIRMA (Sıfır Donma)
-// =========================================================
-function compressToDataURL(file) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (event) => {
-      const img = new Image();
-      img.src = event.target.result;
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        let width = img.width;
-        let height = img.height;
-
-        // Mobil için ideal hızlı boyut limitleri
-        const MAX_WIDTH = 1000; 
-        const MAX_HEIGHT = 1000;
-
-        if (width > height) {
-          if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-        } else {
-          if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, width, height);
-
-        // Hızlıca Base64 formatına çeviriyoruz
-        const dataURL = canvas.toDataURL("image/jpeg", 0.7);
-        resolve(dataURL);
-      };
-      img.onerror = () => reader.result;
-    };
-    reader.onerror = () => resolve("");
-  });
+// Drive'dan verileri çekip galeriyi inşa eden ana motor
+async function fetchGallery() {
+  if (!galleryContainer) return;
+  
+  try {
+    const response = await fetch(APPS_SCRIPT_URL);
+    const result = await response.json();
+    
+    if (result.status === "success") {
+      allMedia = result.data;
+      renderGallery();
+    }
+  } catch (error) {
+    console.error("Galeri yükleme hatası:", error);
+    galleryContainer.innerHTML = `<div class="loading">Medyalar yüklenirken bir hata oluştu.</div>`;
+  }
 }
 
-// =========================================================
-// CANLI GALERİ VE LIGHTBOX SİSTEMİ (Değişmedi - Kararlı)
-// =========================================================
-const q = query(collection(db, "photos"), orderBy("createdAt", "desc"));
-
-onSnapshot(q, (snapshot) => {
-  if (!galleryContainer) return;
+function renderGallery() {
   galleryContainer.innerHTML = "";
-  allMedia = [];
-
-  snapshot.forEach((doc) => {
-    const data = doc.data();
-    if (data.imageUrl) {
-      const isVideo = data.mimeType ? data.mimeType.startsWith("video/") : data.imageUrl.toLowerCase().includes(".mp4");
-      allMedia.push({ url: data.imageUrl, type: isVideo ? "video" : "image" });
-    }
-  });
 
   if (allMedia.length === 0) {
     galleryContainer.innerHTML = `<div class="loading">Henüz fotoğraf veya video yüklenmedi. İlk siz yükleyin! ♥</div>`;
@@ -164,25 +114,18 @@ onSnapshot(q, (snapshot) => {
     const wrapper = document.createElement("div");
     wrapper.className = "gallery-image-wrapper";
 
-    if (media.type === "video") {
+    const isVideo = media.mimeType.startsWith("video/");
+
+    if (isVideo) {
       wrapper.innerHTML = `
-        <video src="${media.url}" muted playsinline style="width:100%; height:100%; object-fit:cover; pointer-events:none; opacity:0; transition: opacity 0.6s ease;"></video>
+        <video src="${media.embedUrl}" muted playsinline style="width:100%; height:100%; object-fit:cover; pointer-events:none;"></video>
         <div style="position:absolute; inset:0; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.15); color:#fff; font-size:24px;">▶</div>
       `;
-      const videoElement = wrapper.querySelector("video");
-      videoElement.addEventListener("loadeddata", () => { videoElement.style.opacity = "1"; });
     } else {
       const img = document.createElement("img");
-      img.src = media.url;
+      img.src = media.embedUrl;
       img.loading = "lazy";
       img.draggable = false;
-      
-      img.style.opacity = "0";
-      img.style.transform = "translateY(15px) scale(0.96)";
-      img.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-      img.addEventListener("contextmenu", (e) => e.preventDefault());
-      
-      if (img.complete) { revealMedia(img); } else { img.onload = () => revealMedia(img); }
       wrapper.appendChild(img);
     }
 
@@ -194,38 +137,70 @@ onSnapshot(q, (snapshot) => {
 
     galleryContainer.appendChild(wrapper);
   });
-});
-
-function revealMedia(element) {
-  requestAnimationFrame(() => {
-    element.style.opacity = "1";
-    element.style.transform = "translateY(0) scale(1)";
-  });
 }
 
 function openLightboxWithIndex(index) {
-  if (!lightbox || !lightboxImage || !allMedia[index]) return;
+  if (!lightbox || !allMedia[index]) return;
   const media = allMedia[index];
-  const existingVideo = lightbox.querySelector("video");
-  if (existingVideo) existingVideo.remove();
-  lightboxImage.style.display = "none";
+  const container = document.getElementById("lightboxContent");
+  container.innerHTML = ""; 
 
-  if (media.type === "video") {
+  const isVideo = media.mimeType.startsWith("video/");
+
+  if (isVideo) {
     const videoElement = document.createElement("video");
-    videoElement.src = media.url;
+    videoElement.src = media.embedUrl;
     videoElement.controls = true;
     videoElement.autoplay = true;
     videoElement.playsInline = true;
-    videoElement.style.maxWidth = "90%";
+    videoElement.style.maxWidth = "100%";
     videoElement.style.maxHeight = "80vh";
     videoElement.style.borderRadius = "12px";
-    videoElement.style.border = "2px solid var(--gold-light)";
-    lightbox.appendChild(videoElement);
+    container.appendChild(videoElement);
   } else {
-    lightboxImage.src = media.url;
-    lightboxImage.style.display = "block";
+    const imgElement = document.createElement("img");
+    imgElement.src = media.embedUrl;
+    imgElement.style.maxWidth = "100%";
+    imgElement.style.maxHeight = "80vh";
+    imgElement.style.borderRadius = "12px";
+    container.appendChild(imgElement);
   }
   lightbox.style.display = "flex";
+}
+
+// Dosya okuma yardımcı fonksiyonları
+function readFileAsDataURL(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => resolve(e.target.result);
+    reader.readAsDataURL(file);
+  });
+}
+
+function compressToDataURL(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+        const MAX = 1000;
+
+        if (width > height && width > MAX) { height *= MAX / width; width = MAX; }
+        else if (height > width && height > MAX) { width *= MAX / height; height = MAX; }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", 0.7));
+      };
+    };
+  });
 }
 
 function nextMedia() {
@@ -240,20 +215,23 @@ function prevMedia() {
   openLightboxWithIndex(currentMediaIndex);
 }
 
+if (prevBtn) prevBtn.addEventListener("click", (e) => { e.stopPropagation(); prevMedia(); });
+if (nextBtn) nextBtn.addEventListener("click", (e) => { e.stopPropagation(); nextMedia(); });
+
+// Swipe (Kaydırma) Desteği
 let touchStartX = 0; let touchEndX = 0;
 if (lightbox) {
   lightbox.addEventListener("touchstart", (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
   lightbox.addEventListener("touchend", (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, { passive: true });
 }
-
 function handleSwipe() {
-  const swipeThreshold = 40;
-  if (touchStartX - touchEndX > swipeThreshold) nextMedia(); 
-  else if (touchEndX - touchStartX > swipeThreshold) prevMedia(); 
+  const threshold = 40;
+  if (touchStartX - touchEndX > threshold) nextMedia(); 
+  else if (touchEndX - touchStartX > threshold) prevMedia(); 
 }
 
 if (closeLightbox && lightbox) {
-  const closeAll = () => { lightbox.style.display = "none"; const v = lightbox.querySelector("video"); if (v) v.remove(); };
+  const closeAll = () => { lightbox.style.display = "none"; document.getElementById("lightboxContent").innerHTML = ""; };
   closeLightbox.addEventListener("click", closeAll);
   lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeAll(); });
 }
@@ -262,5 +240,5 @@ document.addEventListener("keydown", (e) => {
   if (!lightbox || lightbox.style.display !== "flex") return;
   if (e.key === "ArrowRight") nextMedia();
   if (e.key === "ArrowLeft") prevMedia();
-  if (e.key === "Escape") { lightbox.style.display = "none"; const v = lightbox.querySelector("video"); if (v) v.remove(); }
+  if (e.key === "Escape") { lightbox.style.display = "none"; document.getElementById("lightboxContent").innerHTML = ""; }
 });
